@@ -1,7 +1,7 @@
 import { Article } from "./Article";
 
 export function Articles() {
-    // let articles: any = {};
+    let articles: any = {};
 
     return (
         <div>
