@@ -16,14 +16,17 @@
     width: 500px;
     height: auto;
     margin: 0;
+
     h1 {
         margin: 0;
         font-size: 50px;
     }
+
     p {
         margin: 0;
         font-size: 20px;
     }
+
     img {
         margin: 0;
         width: 100%;
@@ -35,6 +38,7 @@
     .articles {
         grid-template-columns: none;
     }
+
     .article {
         width: auto;
     }
@@ -45,6 +49,7 @@
         h1 {
             font-size: 30px;
         }
+
         p {
             font-size: 10px;
         }

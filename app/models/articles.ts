@@ -32,4 +32,6 @@ const articlesSchema = new mongoose.Schema(
 );
 
 export const ArticlesModel =
-    mongoose.models.articles ?? mongoose.model("articles", articlesSchema);
+    mongoose.models?.articles || mongoose.model("articles", articlesSchema);
+
+// mongoose.models.articles ?? mongoose.model("articles", articlesSchema);

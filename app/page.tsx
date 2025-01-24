@@ -2,7 +2,6 @@ import styles from "./page.module.scss";
 import { Header } from "./components/Header";
 import { Fredoka } from "next/font/google";
 import { Caveat } from "next/font/google";
-import Image from "next/image";
 
 const fredoka = Fredoka({
     subsets: ["latin"],

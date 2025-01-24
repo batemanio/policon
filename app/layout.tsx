@@ -3,8 +3,8 @@ import { Raleway } from "next/font/google";
 import "./globals.scss";
 import mongoose from "mongoose";
 
-const uri =
-    "mongodb+srv://leobateman21:aePQlb5bc6QkFlPC@policon.9t9kf.mongodb.net/policon";
+const uri: any = process.env.DB_URI;
+console.log(uri);
 mongoose.connect(uri);
 
 const raleway = Raleway({
