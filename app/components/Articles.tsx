@@ -1,13 +1,19 @@
 import { Article } from "./Article";
+import { ArticlesModel } from "../models/articles";
+import styles from "./Articles.module.scss";
 
-export function Articles() {
-    let articles: any = {};
+export async function Articles() {
+    let articles: any = await ArticlesModel.find();
+    console.log(articles);
 
     return (
-        <div>
-            {articles.map(({ article, index }: any) => (
-                <Article article={article}></Article>
-            ))}
-        </div>
+        <>
+            <h1 className={styles.articlesHeader}>Articles:</h1>
+            <div className={styles.articles}>
+                {articles.map((article: any, index: number) => (
+                    <Article article={JSON.stringify(article)}></Article>
+                ))}
+            </div>
+        </>
     );
 }

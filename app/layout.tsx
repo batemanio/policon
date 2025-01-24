@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.scss";
+import mongoose from "mongoose";
+
+const uri =
+    "mongodb+srv://leobateman21:aePQlb5bc6QkFlPC@policon.9t9kf.mongodb.net/policon";
+mongoose.connect(uri);
 
 const raleway = Raleway({
     subsets: ["latin"],
