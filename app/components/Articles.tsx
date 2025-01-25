@@ -10,9 +10,10 @@ export async function Articles() {
         <>
             <h1 className={styles.articlesHeader}>Articles:</h1>
             <div className={styles.articles}>
-                {articles.map((article: any, index: number) => (
+                {/* {articles.map((article: any, index: number) => (
                     <Article article={JSON.stringify(article)}></Article>
-                ))}
+                ))} */}
+                <Article article={JSON.stringify(articles[0])}></Article>
             </div>
         </>
     );

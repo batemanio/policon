@@ -1,10 +1,6 @@
-export async function FullArticle({ articleData }: any) {
-    function formatDate(date: any) {
-        const d = new Date(date);
-        const formattedDate = d.toDateString();
-        return formattedDate;
-    }
+import { formatDate } from "../functions/formatDate";
 
+export async function FullArticle({ articleData }: any) {
     return (
         <>
             <div>
