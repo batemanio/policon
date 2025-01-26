@@ -1,4 +1,5 @@
 import { formatDate } from "../functions/formatDate";
+import styles from "./FullArticle.module.scss";
 
 export async function FullArticle({ articleData }: any) {
     return (

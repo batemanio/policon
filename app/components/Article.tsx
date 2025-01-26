@@ -97,7 +97,7 @@ export function Article({ article, index }: any) {
                         ))}
                         <br />
                         <br />
-                        <div>
+                        <div className={styles.preventSelect}>
                             <span
                                 onClick={toggleLike}
                                 className={`${
@@ -106,6 +106,7 @@ export function Article({ article, index }: any) {
                                         : "fas fa-thumbs-up"
                                 } ${styles.thumbsUp}`}
                             ></span>
+                            <span className={styles.likes}>{likes[0]}</span>
                             <span
                                 onClick={toggleDislike}
                                 className={`${
@@ -114,19 +115,17 @@ export function Article({ article, index }: any) {
                                         : "fas fa-thumbs-down"
                                 } ${styles.thumbsDown}`}
                             ></span>
-                            <span
-                                className={`fas fa-comment ${styles.commentsIcon}`}
-                            ></span>
-                        </div>
-                        <div>
-                            <span className={styles.likes}>{likes[0]}</span>
                             <span className={styles.dislikes}>
                                 {dislikes[0]}
                             </span>
+                            <span
+                                className={`fas fa-comment ${styles.commentsIcon}`}
+                            ></span>
                             <span className={styles.comments}>
                                 {article.comments.length}
                             </span>
                         </div>
+                        <div></div>
                     </div>
                 </div>
             </div>
