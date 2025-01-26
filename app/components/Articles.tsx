@@ -4,7 +4,6 @@ import styles from "./Articles.module.scss";
 
 export async function Articles() {
     let articles: any = await ArticlesModel.find();
-    console.log(articles);
 
     return (
         <>
