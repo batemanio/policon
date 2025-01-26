@@ -115,9 +115,6 @@ export function Header() {
                     </ul>
                 </div>
             )}
-            <br />
-            <br />
-            <br />
         </>
     );
 }

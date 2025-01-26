@@ -1,21 +1,19 @@
-import { formatDate } from "../functions/formatDate";
+"use client";
+
+import ArticleInformation from "./ArticleInformation";
+import Comments from "./Comments";
 import styles from "./FullArticle.module.scss";
 
-export async function FullArticle({ articleData }: any) {
+export function FullArticle({ article }: any) {
     return (
         <>
-            <div>
-                <p>{articleData._id}</p>
-                <h1>{articleData.title}</h1>
-                <h2>{articleData.subTitle}</h2>
-                <h3>
-                    Likes: {articleData.likes} Dislikes: {articleData.dislikes}
-                </h3>
-                <h3>
-                    Created: {formatDate(articleData.likes)} Last edited:{" "}
-                    {formatDate(articleData.updatedAt)}
-                </h3>
-                <p>{articleData.content}</p>
+            <div className={styles.article}>
+                <h1 className={styles.title}>{article.title}</h1>
+                <p className={styles.subTitle}>{article.subTitle}</p>
+                <ArticleInformation article={article} fullVersion={"true"} />
+                <img className={styles.primaryImage} src={article.image}></img>
+                <p className={styles.content}>{article.content}</p>
+                <Comments article={article} />
             </div>
         </>
     );

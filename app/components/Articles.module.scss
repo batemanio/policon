@@ -57,48 +57,6 @@
     margin: 0;
     grid-area: 2 / 2 / 3 / 3;
     font-size: 13px;
-
-    .tags {
-        padding: 5px;
-        margin-left: 5px;
-        border-style: solid;
-        border: 5px 5px 5px 5px;
-        border-radius: 3px;
-    }
-
-    .thumbsUp {
-        color: green;
-        cursor: pointer;
-    }
-
-    .thumbsDown {
-        color: red;
-        cursor: pointer;
-    }
-
-    .thumbsUp,
-    .thumbsDown,
-    .commentsIcon {
-        font-size: 20px;
-        margin-left: 10px;
-    }
-
-    .likes,
-    .dislikes,
-    .comments {
-        font-size: 20px;
-        margin-left: 5px;
-        margin-bottom: 10px;
-    }
-}
-
-.preventSelect {
-    -webkit-user-select: none;
-    /* Safari */
-    -ms-user-select: none;
-    /* IE 10 and IE 11 */
-    user-select: none;
-    /* Standard syntax */
 }
 
 @media screen and (max-width: 1050px) {

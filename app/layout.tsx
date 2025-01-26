@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.scss";
 import mongoose from "mongoose";
+import { Header } from "./components/Header";
 
 const uri: any = process.env.DB_URI;
 console.log(uri);
@@ -25,7 +26,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={raleway.className}>{children}</body>
+            <body className={raleway.className}>
+                {children}
+                <Header />
+            </body>
         </html>
     );
 }

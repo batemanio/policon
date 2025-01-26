@@ -1,5 +1,4 @@
 import styles from "./page.module.scss";
-import { Header } from "./components/Header";
 import { Fredoka } from "next/font/google";
 import { Caveat } from "next/font/google";
 
@@ -16,7 +15,6 @@ const caveat = Caveat({
 export default function Home() {
     return (
         <>
-            <Header />
             <div className={styles.mainBody}>
                 <h1 className={[fredoka.className, styles.title].join(" ")}>
                     Policon
@@ -32,7 +30,11 @@ export default function Home() {
                     </p>
                 </i>
                 <a href="/articles">
-                    <button className={styles.startButton}>
+                    <button
+                        className={[caveat.className, styles.startButton].join(
+                            " "
+                        )}
+                    >
                         Join the empowerment
                     </button>
                 </a>
