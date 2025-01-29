@@ -1,82 +1,169 @@
 "use client";
 
 import { createBlog } from "@/app/api/createBlog";
+import { ArticleBody } from "@/app/components/ArticleBody";
 import { useState } from "react";
+import styles from "./page.module.scss";
 
-export default function postCreator() {
+export default function PostCreator() {
     const [title, setTitle] = useState("");
     const [subTitle, setSubTitle] = useState("");
     const [primaryImage, setPrimaryImage] = useState("");
-    const [body, setBody] = useState({});
+    const [body, setBody]: any = useState([]);
     const [bodySection, setBodySection] = useState("");
     const [bodyType, setBodyType] = useState("text");
-    const [tags, setTags] = useState([]);
+    const [tags, setTags]: any = useState([]);
     const [tagsSection, setTagsSection] = useState("");
+    const [allFieldsComplete, setAllFieldsComplete]: any = useState(true);
+    const [saved, setSaved]: any = useState(null);
 
     const authorId = "id_placehold";
 
     function addBodySection() {
-        console.log("creating body section...");
+        const newBody = body;
+        if (bodyType === "image") {
+            newBody.push({ image: bodySection });
+        } else if (bodyType === "text") {
+            newBody.push({ text: bodySection });
+        }
+        setBody(newBody);
+        setBodySection("");
     }
     function addTagsection() {
-        console.log("creating tags section...");
+        const newTags = tags;
+        tags.push(tagsSection);
+        setTags(newTags);
+        setTagsSection("");
     }
 
     function create() {
-        console.log("uploading...");
-        createBlog(title, subTitle, primaryImage, body, tags, authorId);
+        if (title && subTitle && primaryImage && body && tags) {
+            createBlog(
+                title,
+                subTitle,
+                primaryImage,
+                body,
+                tags,
+                authorId
+            ).then((res: boolean) => {
+                setSaved(res);
+            });
+        } else {
+            setAllFieldsComplete(false);
+        }
     }
 
     return (
         <>
-            <div>
-                <h2>Title:</h2>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                ></input>
+            {saved === null ? (
+                <>
+                    <div className={styles.creator}>
+                        <div className={styles.titleContainer}>
+                            <h2>Title:</h2>
+                            <textarea
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            ></textarea>
+                            <p>Character counter</p>
+                        </div>
+                        <div className={styles.subTitleContainer}>
+                            <h2>Sub Title:</h2>
+                            <textarea
+                                className={styles.subTitleInput}
+                                value={subTitle}
+                                onChange={(e) => setSubTitle(e.target.value)}
+                            ></textarea>
+                        </div>
 
-                <h2>Sub Title:</h2>
-                <input
-                    type="text"
-                    value={subTitle}
-                    onChange={(e) => setSubTitle(e.target.value)}
-                ></input>
+                        <div className={styles.primaryImageContainer}>
+                            <h2>Cover image URL:</h2>
+                            <textarea
+                                value={primaryImage}
+                                onChange={(e) =>
+                                    setPrimaryImage(e.target.value)
+                                }
+                            ></textarea>
+                        </div>
 
-                <h2>Primary image:</h2>
-                <input
-                    type="text"
-                    value={primaryImage}
-                    onChange={(e) => setPrimaryImage(e.target.value)}
-                ></input>
-
-                <h2>Body:</h2>
-                <select
-                    name="body"
-                    value={bodyType}
-                    onChange={(e) => setBodyType(e.target.value)}
-                >
-                    <option value="text">text</option>
-                    <option value="image">image</option>
-                </select>
-                <input
-                    type="text"
-                    value={bodySection}
-                    onChange={(e) => setBodySection(e.target.value)}
-                ></input>
-                <button onClick={addBodySection}>add body section</button>
-                <h2>Tags:</h2>
-                <input
-                    type="text"
-                    value={tagsSection}
-                    onChange={(e) => setTagsSection(e.target.value)}
-                ></input>
-                <button onClick={addTagsection}>add tag</button>
-
-                <h1>Submit:</h1>
-                <button onClick={create}>Create Blog!</button>
-            </div>
+                        <div className={styles.bodyContainer}>
+                            <div>
+                                <h2>Paragraph:</h2>
+                                <label className={styles.sectionSelectionLabel}>
+                                    Paragraph type (image or text):
+                                </label>
+                                <select
+                                    className={styles.addSectionSelection}
+                                    name="body"
+                                    value={bodyType}
+                                    onChange={(e: any) =>
+                                        setBodyType(e.target.value)
+                                    }
+                                >
+                                    <option
+                                        className={styles.options}
+                                        value="text"
+                                    >
+                                        text
+                                    </option>
+                                    <option
+                                        className={styles.options}
+                                        value="image"
+                                    >
+                                        image
+                                    </option>
+                                </select>
+                            </div>
+                            <textarea
+                                value={bodySection}
+                                onChange={(e) => setBodySection(e.target.value)}
+                            ></textarea>
+                            <br />
+                            <button
+                                className={`${styles.addSectionButton} ${styles.paragraphAddButton}`}
+                                onClick={addBodySection}
+                            >
+                                Add Paragraph
+                            </button>
+                            {body.map((section: any, index: number) => (
+                                <ArticleBody body={section} key={index} />
+                            ))}
+                        </div>
+                        <div className={styles.tagsContainer}>
+                            <h2>Tags:</h2>
+                            <input
+                                type="text"
+                                value={tagsSection}
+                                onChange={(e) => setTagsSection(e.target.value)}
+                            ></input>
+                            <button
+                                className={styles.addSectionButton}
+                                onClick={addTagsection}
+                            >
+                                Add tag
+                            </button>
+                            <p>{tags.toString()}</p>
+                        </div>
+                        <div>
+                            <button className={styles.publish} onClick={create}>
+                                Publish Blog!
+                            </button>
+                        </div>
+                    </div>
+                    {!allFieldsComplete && (
+                        <p className={styles.error} style={{ color: "red" }}>
+                            Please complete all the fields!
+                        </p>
+                    )}
+                </>
+            ) : saved ? (
+                <p className={styles.error} style={{ color: "green" }}>
+                    Complete!
+                </p>
+            ) : (
+                <p className={styles.error} style={{ color: "red" }}>
+                    Error!
+                </p>
+            )}
         </>
     );
 }

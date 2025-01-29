@@ -1,0 +1,131 @@
+.creator {
+    font-size: 30px;
+    font-family: 'Times New Roman';
+
+    h2 {
+        margin: 0;
+    }
+
+    input,
+    textarea {
+        margin: 5px 0 20px 0;
+        border-radius: 5px;
+        border: 3px lightblue solid;
+        font-size: 30px;
+        font-family: 'Times New Roman';
+        field-sizing: content;
+        width: calc(100% - 20px);
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+}
+
+.titleContainer {
+    font-size: 30px;
+
+    textarea {
+        font-size: 20px;
+        height: 50px;
+    }
+}
+
+.subTitleContainer {
+    font-size: 20px;
+
+    textarea {
+        font-size: 20px;
+        height: 60px;
+    }
+}
+
+.primaryImageContainer {
+    font-size: 15px;
+
+    textarea {
+        font-size: 15px;
+    }
+}
+
+.bodyContainer {
+    font-size: 15px;
+
+    textarea {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+}
+
+.tagsContainer {
+    font-size: 15px;
+
+    input {
+        font-size: 15px;
+        height: 20px;
+    }
+}
+
+.addSectionButton {
+    margin-left: 5px;
+    border-radius: 5px;
+    border: 3px lightblue solid;
+    font-size: 15px;
+    height: 28px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.addSectionSelection {
+    margin-left: 5px;
+    border-radius: 5px;
+    border: 3px lightblue solid;
+    font-size: 15px;
+    height: 28px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.paragraphAddButton {
+    margin-left: 0;
+}
+
+.sectionSelectionLabel {
+    font-size: 17px;
+}
+
+.publish {
+    font-family: 'Times New Roman';
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 3px rgb(175, 255, 255) solid;
+    font-size: 40px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.publish:hover {
+    animation: shake 0.5s infinite
+}
+
+.error {
+    font-size: 20px;
+}
+
+@keyframes shake {
+    25% {
+        transform: rotate(10deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    75% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}

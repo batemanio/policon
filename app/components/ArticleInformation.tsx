@@ -47,7 +47,7 @@ export default function ArticleInformation({ article, fullVersion }: any) {
     }
 
     return (
-        <>
+        <div className={styles.container}>
             <link
                 rel="stylesheet"
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -104,6 +104,6 @@ export default function ArticleInformation({ article, fullVersion }: any) {
                     <br />
                 </>
             )}
-        </>
+        </div>
     );
 }

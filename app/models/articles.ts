@@ -19,10 +19,11 @@ const articlesSchema = new mongoose.Schema(
             require: true,
         },
         author: {
-            type: "UUID",
+            type: String,
+            // type: "UUID",
             require: true,
         },
-        content: { type: Map, require: true },
+        content: [{ text: String }, { image: String }],
         likes: { type: Number, require: true },
         dislikes: { type: Number, require: true },
         comments: [

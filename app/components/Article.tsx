@@ -19,7 +19,7 @@ export function Article({ article, index }: any) {
             ></link>
             <div className={styles.articleContainer} key={id}>
                 <div className={styles.article}>
-                    <Link href={articleLink}>
+                    <Link className={styles.imageContainer} href={articleLink}>
                         <img
                             src={article.image}
                             className={styles.image}

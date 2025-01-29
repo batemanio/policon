@@ -7,8 +7,8 @@ export async function createBlog(
     subTitle: string,
     primaryImage: string,
     body: object,
-    tags: any,
-    authorId: any
+    tags: string[],
+    authorId: string
 ) {
     const blog = {
         title: title,
@@ -22,6 +22,12 @@ export async function createBlog(
         comments: [],
     };
 
-    const blogData = new ArticlesModel(blog);
-    await blogData.save();
+    try {
+        const blogData = new ArticlesModel(blog);
+        await blogData.save();
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }
