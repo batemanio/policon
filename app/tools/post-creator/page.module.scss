@@ -6,15 +6,16 @@
         margin: 0;
     }
 
-    input,
     textarea {
-        margin: 5px 0 20px 0;
+        margin: 5px 0 0 0;
         border-radius: 5px;
         border: 3px lightblue solid;
         font-size: 30px;
         font-family: 'Times New Roman';
         field-sizing: content;
         width: calc(100% - 20px);
+        max-width: 99%;
+        resize: none;
     }
 
     h1 {
@@ -26,8 +27,8 @@
     font-size: 30px;
 
     textarea {
-        font-size: 20px;
-        height: 50px;
+        font-size: 40px;
+        min-height: 50px;
     }
 }
 
@@ -35,8 +36,8 @@
     font-size: 20px;
 
     textarea {
-        font-size: 20px;
-        height: 60px;
+        font-size: 30px;
+        min-height: 60px;
     }
 }
 
@@ -44,7 +45,8 @@
     font-size: 15px;
 
     textarea {
-        font-size: 15px;
+        font-size: 17px;
+        min-height: 20px;
     }
 }
 
@@ -52,28 +54,30 @@
     font-size: 15px;
 
     textarea {
-        font-size: 15px;
+        font-size: 17px;
         margin-bottom: 0;
+        min-height: 150px;
     }
 }
 
 .tagsContainer {
     font-size: 15px;
 
-    input {
-        font-size: 15px;
-        height: 20px;
+    textarea {
+        font-size: 17px;
+        min-height: 20px;
+        margin-bottom: 0;
     }
 }
 
 .addSectionButton {
-    margin-left: 5px;
     border-radius: 5px;
     border: 3px lightblue solid;
     font-size: 15px;
     height: 28px;
     cursor: pointer;
     background-color: white;
+    margin-bottom: 15px;
 }
 
 .addSectionSelection {
@@ -110,6 +114,11 @@
 
 .error {
     font-size: 20px;
+}
+
+.characterCounter {
+    font-size: 15px;
+    margin-top: -5px;
 }
 
 @keyframes shake {

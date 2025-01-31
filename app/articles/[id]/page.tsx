@@ -9,7 +9,7 @@ export default async function Page({ params }: any) {
     return (
         <>
             <Suspense fallback={<LoadingPage />}>
-                <FullArticle article={article} />
+                <FullArticle article={JSON.stringify(article)} />
             </Suspense>
         </>
     );

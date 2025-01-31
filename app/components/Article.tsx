@@ -7,6 +7,9 @@ import ArticleInformation from "./ArticleInformation";
 
 export function Article({ article, index }: any) {
     article = JSON.parse(article);
+    const smallArticle = [{ ...article }, article.comments.length];
+    smallArticle[0].content = undefined;
+    smallArticle[0].comments = undefined;
 
     const id = article._id;
     const articleLink = `/articles/${id}`;
@@ -44,7 +47,7 @@ export function Article({ article, index }: any) {
                         style={{ marginTop: "auto" }}
                     >
                         <ArticleInformation
-                            article={article}
+                            smallArticle={smallArticle}
                             fullVersion={false}
                         />
                     </div>

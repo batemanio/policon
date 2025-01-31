@@ -19,10 +19,20 @@
     max-width: 100%;
     height: auto;
     border-radius: 5px;
+    margin-bottom: -40px;
+
 }
 
-.content {
-    font-size: 20px;
+.textContent {
+    font-size: 22px;
+}
+
+.imageContent {
+    width: 500px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .comments {
@@ -31,4 +41,48 @@
 
 .comment {
     margin-top: -10px;
+    font-size: 20px;
+}
+
+.addComment {
+    textarea {
+        margin: 5px 0 0 0;
+        border-radius: 5px;
+        border: 3px lightblue solid;
+        font-size: 20px;
+        font-family: 'Times New Roman';
+        field-sizing: content;
+        width: calc(100% - 20px);
+        max-width: 99%;
+        min-height: 100px;
+        resize: none;
+    }
+
+    button {
+        border-radius: 5px;
+        border: 3px lightblue solid;
+        font-size: 15px;
+        cursor: pointer;
+        background-color: white;
+        margin-bottom: 15px;
+        font-size: 30px;
+    }
+
+    p {
+        font-size: 15px;
+        margin-top: -5px;
+        float: left;
+        margin-left: 10px;
+    }
+}
+
+.error {
+    font-size: 20px;
+}
+
+@media screen and (max-width: 1000px) {
+    .article {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 }

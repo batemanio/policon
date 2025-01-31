@@ -23,14 +23,17 @@ const articlesSchema = new mongoose.Schema(
             // type: "UUID",
             require: true,
         },
-        content: [{ text: String }, { image: String }],
+        content: {
+            type: Array,
+            require: true,
+        },
         likes: { type: Number, require: true },
         dislikes: { type: Number, require: true },
         comments: [
             {
-                author: "UUID",
+                author: String,
                 date: { type: Date, default: Date.now },
-                body: Map,
+                content: String,
                 likes: Number,
             },
         ],

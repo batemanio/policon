@@ -1,13 +1,13 @@
 "use client";
 
 import styles from "./ArticleInformation.module.scss";
-import { updateLikesDislikes } from "../api/updateLikesDislikes";
+import { updateLikesDislikes } from "../actions/updateLikesDislikes";
 import { useState } from "react";
 import { formatDate } from "../functions/formatDate";
 import Link from "next/link";
 
-export default function ArticleInformation({ article, fullVersion }: any) {
-    article = article;
+export default function ArticleInformation({ smallArticle, fullVersion }: any) {
+    const article = smallArticle[0];
 
     const [likes, setLikes]: any = useState([article.likes, false]);
     const [dislikes, setDislikes]: any = useState([article.dislikes, false]);
@@ -93,9 +93,7 @@ export default function ArticleInformation({ article, fullVersion }: any) {
                 <span
                     className={`fas fa-comment ${styles.commentsIcon}`}
                 ></span>
-                <span className={styles.comments}>
-                    {article.comments.length}
-                </span>
+                <span className={styles.comments}>{smallArticle[1]}</span>
             </div>
 
             {fullVersion && (
