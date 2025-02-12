@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { AccountIcon } from "./AccountIcon";
+import { type User } from "@supabase/supabase-js";
 
-export function Header() {
+export function HeaderClient({ user }: { user: User | null }) {
     const pathname = usePathname();
 
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -17,6 +19,8 @@ export function Header() {
     function closeMobileMenu() {
         setShowMobileMenu(false);
     }
+
+    console.log(user);
 
     return (
         <>
@@ -77,6 +81,16 @@ export function Header() {
                 >
                     menu
                 </h2>
+                {user ? (
+                    <Link href="/account" className={styles.accountIcon}>
+                        <AccountIcon user={user} />
+                    </Link>
+                ) : (
+                    <Link href="/login" className={styles.accountIcon}>
+                        <AccountIcon user={user} />
+                    </Link>
+                )}
+
                 <section className={styles.socialMediaIcons}>
                     <Link
                         target="_blank"

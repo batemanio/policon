@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.scss";
-import mongoose from "mongoose";
-import { Header } from "./components/Header";
-
-const uri: any = process.env.DB_URI;
-console.log(uri);
-mongoose.connect(uri);
+import { HeaderServer } from "./components/HeaderServer";
 
 const raleway = Raleway({
     subsets: ["latin"],
@@ -28,7 +23,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={raleway.className}>
                 {children}
-                <Header />
+                <HeaderServer />
             </body>
         </html>
     );

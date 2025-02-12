@@ -15,9 +15,9 @@ export default function PostCreator() {
     const [tags, setTags]: any = useState([]);
     const [tagsSection, setTagsSection]: any = useState(["", 0]);
     const [allFieldsComplete, setAllFieldsComplete]: any = useState(true);
-    const [error, setError]: any = useState({});
+    const [savingError, setSavingError]: any = useState({});
 
-    const authorId = "id_placehold";
+    const authorId = "author_id_placeholder";
 
     function addBodySection() {
         const newBody = body;
@@ -46,7 +46,7 @@ export default function PostCreator() {
                 tags,
                 authorId
             ).then((res: any) => {
-                setError(res);
+                setSavingError(res);
             });
         } else {
             setAllFieldsComplete(false);
@@ -81,7 +81,7 @@ export default function PostCreator() {
 
     return (
         <>
-            {error ? (
+            {savingError ? (
                 <>
                     <div className={styles.creator}>
                         <div className={styles.titleContainer}>
@@ -194,7 +194,7 @@ export default function PostCreator() {
                             Error: 'Please complete all the fields'
                         </p>
                     )}
-                    {error.type === "success" && (
+                    {savingError.type === "success" && (
                         <p className={styles.error} style={{ color: "green" }}>
                             Complete!
                         </p>
@@ -202,7 +202,7 @@ export default function PostCreator() {
                 </>
             ) : (
                 <p className={styles.error} style={{ color: "red" }}>
-                    Server error: '{error.error}'
+                    Server error: '{savingError.error}'
                 </p>
             )}
         </>
