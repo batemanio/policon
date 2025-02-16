@@ -23,7 +23,7 @@ export function FullArticle({ article }: any) {
                 <p className={styles.subTitle}>{article.subTitle}</p>
                 <ArticleInformation
                     smallArticle={smallArticle}
-                    fullVersion={"true"}
+                    fullVersion={true}
                 />
                 {article.content.map((section: any, index: number) => (
                     <ArticleBody body={section} key={index} />

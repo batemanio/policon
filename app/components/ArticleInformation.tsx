@@ -1,47 +1,70 @@
 "use client";
 
 import styles from "./ArticleInformation.module.scss";
-import { updateLikesDislikes } from "../actions/updateLikesDislikes";
-import { useState } from "react";
+import { like } from "../actions/like";
+import { useCallback, useEffect, useState } from "react";
 import { formatDate } from "../functions/formatDate";
 import Link from "next/link";
+import { article } from "../types/dbTables";
+import { getNumberOfLikesAndComments } from "../actions/getNumberOfLikesAndComments";
+import { getUsername } from "../actions/getUsername";
+import { isLiked } from "../actions/isLiked";
+import { createClient } from "@/utils/supabase/client";
 
-export default function ArticleInformation({ smallArticle, fullVersion }: any) {
-    const article = smallArticle[0];
+type clientLike = [number, boolean];
 
-    const [likes, setLikes]: any = useState([article.likes, false]);
-    const [dislikes, setDislikes]: any = useState([article.dislikes, false]);
+export default function ArticleInformation({
+    article,
+    fullVersion,
+}: {
+    article: article;
+    fullVersion: boolean;
+}) {
+    const [likes, setLikes] = useState<clientLike>([0, false]);
+    const [comments, setComments] = useState<clientLike>([0, false]);
+    const [username, setUsername] = useState<string>("");
 
-    const id = article._id;
-    const authorLink = `/writers/${article.author}`;
+    useEffect(() => {
+        async function getUserId() {
+            const supabase = createClient();
 
-    function toggleLike() {
-        if (dislikes[1]) {
-            toggleDislike();
+            const { data: user, error } = await supabase.auth.getUser();
+            if (error) {
+                console.log(error);
+            }
+            if (user.user && article.id) {
+                const liked = await isLiked(article.id, user.user.id);
+            }
         }
-
-        if (!likes[1]) {
-            updateLikesDislikes("likes", 1, id).then((value) => {
-                setLikes([value, true]);
+        getUserId();
+        if (article.id) {
+            getNumberOfLikesAndComments(article.id).then((res: any) => {
+                setLikes([res.content[0], false]);
+                setComments([res.content[1], false]);
             });
-        } else {
-            updateLikesDislikes("likes", -1, id).then((value) => {
-                setLikes([value, false]);
+
+            getUsername(article.user_id).then((res: any) => {
+                if (res.type === "success") {
+                    setUsername(res.content[0].username);
+                }
             });
         }
-    }
-    function toggleDislike() {
-        if (likes[1]) {
-            toggleLike();
-        }
+    }, []);
 
-        if (!dislikes[1]) {
-            updateLikesDislikes("dislikes", 1, id).then((value) => {
-                setDislikes([value, true]);
-            });
-        } else {
-            updateLikesDislikes("dislikes", -1, id).then((value) => {
-                setDislikes([value, false]);
+    const authorLink = `/writers/${article.user_id}`;
+
+    function clientLike() {
+        if (article.id) {
+            like(article.id, 1).then((res: any) => {
+                if (res.type === "success") {
+                    if (!res.content) {
+                        setLikes([(likes[0] += 1), true]);
+                    } else {
+                        if (likes[0] > 0) {
+                            setLikes([(likes[0] -= 1), false]);
+                        }
+                    }
+                }
             });
         }
     }
@@ -54,10 +77,10 @@ export default function ArticleInformation({ smallArticle, fullVersion }: any) {
             ></link>
             <hr style={{ width: "90%" }} />
             <Link href={authorLink}>
-                <span>{article.author}</span>
+                <span>{username}</span>
             </Link>
             <br />
-            <span>Published {formatDate(article.createdAt)}</span>
+            <span>Published {formatDate(article.created_at)}</span>
             {/* {fullVersion && (
                 <>
                     <br />
@@ -75,25 +98,19 @@ export default function ArticleInformation({ smallArticle, fullVersion }: any) {
             <br />
             <div className={styles.preventSelect}>
                 <span
-                    onClick={toggleLike}
+                    onClick={clientLike}
                     className={`${
                         !likes[1] ? "far fa-thumbs-up" : "fas fa-thumbs-up"
                     } ${styles.thumbsUp}`}
                 ></span>
                 <span className={styles.likes}>{likes[0]}</span>
+
                 <span
-                    onClick={toggleDislike}
                     className={`${
-                        !dislikes[1]
-                            ? "far fa-thumbs-down"
-                            : "fas fa-thumbs-down"
-                    } ${styles.thumbsDown}`}
+                        !comments[1] ? "far fa-comment" : "fas fa-comment"
+                    } ${styles.commentsIcon}`}
                 ></span>
-                <span className={styles.dislikes}>{dislikes[0]}</span>
-                <span
-                    className={`fas fa-comment ${styles.commentsIcon}`}
-                ></span>
-                <span className={styles.comments}>{smallArticle[1]}</span>
+                <span className={styles.comments}>{comments[0]}</span>
             </div>
 
             {fullVersion && (

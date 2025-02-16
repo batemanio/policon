@@ -3,17 +3,22 @@ import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { downloadImage } from "../actions/downloadImage";
+import styles from "./accountForm.module.scss";
 
 export default function Avatar({
     uid,
     url,
     size,
+    loading,
     onUpload,
+    setError,
 }: {
     uid: string | null;
     url: string | null;
     size: number;
     onUpload: (url: string) => void;
+    loading: boolean;
+    setError: any;
 }) {
     const supabase = createClient();
     const [avatarUrl, setAvatarUrl] = useState<string | null>(url);
@@ -51,34 +56,38 @@ export default function Avatar({
 
                 onUpload(filePath);
             } catch (error) {
-                alert("Error uploading avatar!");
+                setError(error);
             } finally {
                 setUploading(false);
             }
         };
     }
-
     return (
-        <div>
-            {avatarUrl ? (
-                <Image
-                    width={size}
-                    height={size}
-                    src={avatarUrl}
-                    alt="Avatar"
-                    className="avatar image"
-                    style={{ height: size, width: size }}
-                />
+        <div style={{ marginBottom: "10px" }}>
+            {!loading ? (
+                avatarUrl ? (
+                    <Image
+                        width={size}
+                        height={size}
+                        src={avatarUrl}
+                        alt="Avatar"
+                        className={styles.avatar}
+                    />
+                ) : (
+                    <div style={{ height: size, width: size }}>
+                        <p>No avatar</p>
+                    </div>
+                )
             ) : (
-                <div
-                    className="avatar no-image"
-                    style={{ height: size, width: size }}
-                />
+                <p>loading</p>
             )}
-
-            <div style={{ width: size }}>
-                <label className="button primary block" htmlFor="single">
-                    {uploading ? "Uploading ..." : "Upload"}
+            <div>
+                <label
+                    style={{ margin: "100px" }}
+                    className={styles.button}
+                    htmlFor="single"
+                >
+                    {uploading ? "Uploading ..." : "Upload Avatar"}
                 </label>
                 <input
                     style={{

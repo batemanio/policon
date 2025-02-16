@@ -38,16 +38,12 @@ export default function PostCreator() {
 
     function create() {
         if (title[0] && subTitle[0] && primaryImage[0]) {
-            createBlog(
-                title[0],
-                subTitle[0],
-                primaryImage[0],
-                body,
-                tags,
-                authorId
-            ).then((res: any) => {
-                setSavingError(res);
-            });
+            createBlog(title[0], subTitle[0], primaryImage[0], tags, body).then(
+                (res: any) => {
+                    console.log(res);
+                    setSavingError(res);
+                }
+            );
         } else {
             setAllFieldsComplete(false);
         }
@@ -83,6 +79,7 @@ export default function PostCreator() {
         <>
             {savingError ? (
                 <>
+                    <p>hi!</p>
                     <div className={styles.creator}>
                         <div className={styles.titleContainer}>
                             <h2>Title:</h2>

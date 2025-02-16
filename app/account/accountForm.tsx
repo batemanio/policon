@@ -4,13 +4,17 @@ import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import Avatar from "./avatar";
+import styles from "./accountForm.module.scss";
+import { dbError } from "../types/errors";
 
 export default function AccountForm({ user }: { user: User | null }) {
     const supabase = createClient();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [fullname, setFullname] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
     const [avatar_url, setAvatarUrl] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | dbError>(false);
+    const [profileUpdated, setProfileUpdated] = useState(false);
 
     const getProfile = useCallback(async () => {
         try {
@@ -32,8 +36,8 @@ export default function AccountForm({ user }: { user: User | null }) {
                 setUsername(data.username);
                 setAvatarUrl(data.avatar_url);
             }
-        } catch (error) {
-            alert("Error loading user data!");
+        } catch (error: any) {
+            setError(error);
         } finally {
             setLoading(false);
         }
@@ -53,29 +57,32 @@ export default function AccountForm({ user }: { user: User | null }) {
     }) {
         try {
             setLoading(true);
+            setProfileUpdated(false);
 
             const { error } = await supabase.from("profiles").upsert({
                 id: user?.id as string,
                 full_name: fullname,
                 username,
                 avatar_url,
-                updated_at: new Date().toISOString(),
+                edited_at: new Date().toISOString(),
             });
             if (error) throw error;
-            alert("Profile updated!");
-        } catch (error) {
-            alert("Error updating the data!");
+            setProfileUpdated(true);
+        } catch (error: any) {
+            console.log(error);
+            setError(error);
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <div className="form-widget">
+        <div className={styles.form}>
             <Avatar
+                setError={setError}
                 uid={user?.id ?? null}
                 url={avatar_url}
-                size={150}
+                size={250}
                 onUpload={(url: string) => {
                     setAvatarUrl(url);
                     updateProfile({
@@ -84,15 +91,29 @@ export default function AccountForm({ user }: { user: User | null }) {
                         avatar_url: url,
                     });
                 }}
+                loading={loading}
             />
 
             <div>
-                <label htmlFor="email">Email</label>
-                <input id="email" type="text" value={user?.email} disabled />
+                <label className={styles.label} htmlFor="email">
+                    Email
+                </label>
+                <input
+                    maxLength={100}
+                    className={styles.input}
+                    id="email"
+                    type="text"
+                    value={user?.email}
+                    disabled
+                />
             </div>
             <div>
-                <label htmlFor="fullName">Full Name</label>
+                <label className={styles.label} htmlFor="fullName">
+                    Full Name
+                </label>
                 <input
+                    maxLength={100}
+                    className={styles.input}
                     id="fullName"
                     type="text"
                     value={fullname || ""}
@@ -100,8 +121,12 @@ export default function AccountForm({ user }: { user: User | null }) {
                 />
             </div>
             <div>
-                <label htmlFor="username">Username</label>
+                <label className={styles.label} htmlFor="username">
+                    Username
+                </label>
                 <input
+                    maxLength={100}
+                    className={styles.input}
                     id="username"
                     type="text"
                     value={username || ""}
@@ -111,7 +136,7 @@ export default function AccountForm({ user }: { user: User | null }) {
 
             <div>
                 <button
-                    className="button primary block"
+                    className={styles.button}
                     onClick={() =>
                         updateProfile({
                             fullname,
@@ -127,11 +152,21 @@ export default function AccountForm({ user }: { user: User | null }) {
 
             <div>
                 <form action="/auth/signout" method="post">
-                    <button className="button block" type="submit">
+                    <button className={styles.button} type="submit">
                         Sign out
                     </button>
                 </form>
             </div>
+            {error && (
+                <p style={{ color: "red" }} className={styles.error}>
+                    Error
+                </p>
+            )}
+            {profileUpdated && (
+                <p style={{ color: "green" }} className={styles.error}>
+                    Profile Updated!
+                </p>
+            )}
         </div>
     );
 }

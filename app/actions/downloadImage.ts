@@ -3,7 +3,7 @@ export async function downloadImage(path: string, supabase: any) {
         const { data, error } = await supabase.storage
             .from("avatars")
             .download(path);
-        if (error) {
+        if (error?.message) {
             throw error;
         }
 

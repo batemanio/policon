@@ -1,11 +1,13 @@
 "use server";
 
-import { ArticlesModel } from "../models/articles";
+import { createClient } from "@/utils/supabase/server";
+import { article, content } from "../types/dbTables";
+import { apiError } from "../types/errors";
 
-function checkArrayLegths(body: object[], tags: string[], toShort: boolean) {
+function checkArrayLegths(body: [content], tags: string[], toShort: boolean) {
     let error = false;
-    let bodySectionTextLength: number = 0;
-    let bodySectionImageLength: number = 0;
+    let bodySectionTextLength = 0;
+    let bodySectionImageLength = 0;
     if (!toShort) {
         bodySectionTextLength = 5000;
         bodySectionImageLength = 400;
@@ -40,55 +42,77 @@ export async function createBlog(
     title: string,
     subTitle: string,
     primaryImage: string,
-    body: object[],
     tags: string[],
-    authorId: any
+    body: [content]
 ) {
-    const blog = {
-        title: title,
-        subTitle: subTitle,
-        image: primaryImage,
-        tags: tags,
-        author: authorId,
-        content: body,
-        likes: 0,
-        dislikes: 0,
-        comments: [],
-    };
+    const supabase = await createClient();
 
-    const checkArray: boolean = checkArrayLegths(body, tags, true);
-    if (
-        title.length > 0 &&
-        subTitle.length > 0 &&
-        primaryImage.length > 0 &&
-        checkArray
-    ) {
-        if (
-            title.length <= 75 &&
-            subTitle.length <= 125 &&
-            primaryImage.length <= 400 &&
-            checkArrayLegths(body, tags, false)
-        ) {
-            try {
-                const blogData = new ArticlesModel(blog);
-                await blogData.save();
-                return {
-                    type: "success",
-                };
-            } catch (error: any) {
-                console.log(error);
-                return {
-                    type: "error",
-                    error: "Error",
-                };
-            }
-        } else {
-            return {
-                type: "error",
-                error: "A field/s has to many characters.",
+    try {
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        if (user) {
+            const user_id: string = user.id;
+
+            const article: article = {
+                title: title,
+                sub_title: subTitle,
+                image: primaryImage,
+                tags: tags,
+                user_id: user_id,
+                content: body,
             };
+
+            const checkArray: boolean = checkArrayLegths(body, tags, true);
+            if (
+                title.length > 0 &&
+                subTitle.length > 0 &&
+                primaryImage.length > 0 &&
+                checkArray
+            ) {
+                if (
+                    title.length <= 75 &&
+                    subTitle.length <= 125 &&
+                    primaryImage.length <= 400 &&
+                    checkArrayLegths(body, tags, false)
+                ) {
+                    const supabase = await createClient();
+
+                    const { data, error } = await supabase
+                        .from("articles")
+                        .insert(article)
+                        .select();
+
+                    if (!error?.message) {
+                        return {
+                            type: "success",
+                        };
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    const returnData: apiError = {
+                        type: "error",
+                        error: "A field/s has to many characters.",
+                    };
+                    return returnData;
+                }
+            } else {
+                const returnData: apiError = {
+                    type: "error",
+                    error: "Please complete all the fields.",
+                };
+                return returnData;
+            }
         }
-    } else {
-        return { type: "error", error: "Please complete all the fields." };
+    } catch (error) {
+        console.log(error);
+
+        const returnData: apiError = {
+            type: "error",
+            error: "Error",
+        };
+        return returnData;
     }
 }

@@ -11,7 +11,7 @@ export function AccountIcon({ user }: { user: User | null }) {
     const supabase = createClient();
     const [loading, setLoading] = useState(true);
     const [avatarUrl, setAvatarUrl]: any = useState<string | null>(null);
-    const [imageAvatarRrl, setImageAvatarUrl]: any = useState<string | null>(
+    const [imageAvatarUrl, setImageAvatarUrl]: any = useState<string | null>(
         null
     );
 
@@ -35,7 +35,7 @@ export function AccountIcon({ user }: { user: User | null }) {
                     setAvatarUrl(data.avatar_url);
                 }
             } catch (error) {
-                alert("Error loading user data!");
+                console.log(error);
             } finally {
                 setLoading(false);
             }
@@ -54,14 +54,18 @@ export function AccountIcon({ user }: { user: User | null }) {
         }
     }, [avatarUrl]);
 
-    if (imageAvatarRrl) {
-        return (
-            <img
-                src={imageAvatarRrl}
-                alt="Avatar"
-                className={styles.profilePicture}
-            />
-        );
+    if (!loading) {
+        if (imageAvatarUrl) {
+            return (
+                <img
+                    src={imageAvatarUrl}
+                    alt="Avatar"
+                    className={styles.profilePicture}
+                />
+            );
+        } else {
+            return <span className={`fas fa-user ${styles.user}`}></span>;
+        }
     } else {
         return <span className={`fas fa-user ${styles.user}`}></span>;
     }

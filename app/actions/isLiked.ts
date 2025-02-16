@@ -3,24 +3,27 @@
 import { createClient } from "@/utils/supabase/server";
 import { apiError } from "../types/errors";
 
-export async function getUsername(user_id: string) {
+export async function isLiked(article_id: string, user_id: string) {
     try {
         const supabase = await createClient();
 
-        const { data: username, error } = await supabase
-            .from("profiles")
-            .select("username")
-            .eq("id", user_id);
+        let { data, error: error } = await supabase
+            .from("interactions")
+            .select()
+            .eq("article_id", article_id)
+            .eq("user_id", user_id);
 
         if (error?.message) {
             throw error;
         }
 
-        const returnData: apiError = {
-            type: "success",
-            content: username,
-        };
-        return returnData;
+        let liked = false;
+
+        if (data?.length) {
+            liked = true;
+        }
+
+        return !liked;
     } catch (error) {
         console.log(error);
 

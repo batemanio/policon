@@ -4,14 +4,11 @@ import styles from "./Articles.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import ArticleInformation from "./ArticleInformation";
+import { article } from "../types/dbTables";
+import { Suspense } from "react";
 
-export function Article({ article, index }: any) {
-    article = JSON.parse(article);
-    const smallArticle = [{ ...article }, article.comments.length];
-    smallArticle[0].content = undefined;
-    smallArticle[0].comments = undefined;
-
-    const id = article._id;
+export function Article({ article }: { article: article }) {
+    const id = article.id;
     const articleLink = `/articles/${id}`;
 
     return (
@@ -36,9 +33,12 @@ export function Article({ article, index }: any) {
                             </span>
                             <br />
                             <span
-                                style={{ fontSize: "20px", marginTop: "-15px" }}
+                                style={{
+                                    fontSize: "20px",
+                                    marginTop: "-15px",
+                                }}
                             >
-                                {article.subTitle}
+                                {article.sub_title}
                             </span>
                         </p>
                     </Link>
@@ -47,7 +47,7 @@ export function Article({ article, index }: any) {
                         style={{ marginTop: "auto" }}
                     >
                         <ArticleInformation
-                            smallArticle={smallArticle}
+                            article={article}
                             fullVersion={false}
                         />
                     </div>

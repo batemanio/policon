@@ -20,8 +20,6 @@ export function HeaderClient({ user }: { user: User | null }) {
         setShowMobileMenu(false);
     }
 
-    console.log(user);
-
     return (
         <>
             <link
