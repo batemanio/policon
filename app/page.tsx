@@ -1,8 +1,9 @@
 import styles from "./page.module.scss";
 import { Fredoka } from "next/font/google";
 import { Caveat } from "next/font/google";
-import { jwtDecode } from "jwt-decode";
-import { createClient } from "@/utils/supabase/server";
+import Image from "next/image";
+// import { jwtDecode } from "jwt-decode";
+// import { createClient } from "@/utils/supabase/server";
 
 const fredoka = Fredoka({
     subsets: ["latin"],
@@ -15,17 +16,26 @@ const caveat = Caveat({
 });
 
 export default async function Home() {
-    const supabase: any = await createClient();
+    // const supabase = await createClient();
 
-    const { subscription: authListener } = supabase.auth.onAuthStateChange(
-        async (event: any, session: any) => {
-            if (session) {
-                const jwt: any = jwtDecode(session.access_token);
-                const userRole = jwt.user_role;
-                console.log("userrole", userRole);
-            }
-        }
-    );
+    // const { subscription: authListener } = supabase.auth.onAuthStateChange(
+    //     async (event: any, session: any) => {
+    //         if (session) {
+    //             const jwt: any = jwtDecode(session.access_token);
+    //             const userRole = jwt.user_role;
+    //             console.log("userrole", userRole);
+    //         }
+    //     }
+    // );
+
+    // const { data: user, error: firstError } = await supabase.auth.getUser();
+    // if (user.user) {
+    //     const { data, error } = await supabase.rpc("authorize", {
+    //         requested_permission: "article_images.delete",
+    //         user_id: user.user.id,
+    //     });
+    //     console.log(user, data);
+    // }
 
     return (
         <>
@@ -53,7 +63,9 @@ export default async function Home() {
                     </button>
                 </a>
             </div>
-            <img
+            <Image
+                height={1080}
+                width={1920}
                 src="/old-paper.jpg"
                 alt="Background image"
                 className={styles.backgroundImage}

@@ -16,11 +16,15 @@ export async function getUsername(user_id: string) {
             throw error;
         }
 
-        const returnData: apiError = {
-            type: "success",
-            content: username,
-        };
-        return returnData;
+        if (username) {
+            const returnData: apiError = {
+                type: "success",
+                content: username[0].username,
+            };
+            return returnData;
+        } else {
+            throw "Invalid user";
+        }
     } catch (error) {
         console.log(error);
 

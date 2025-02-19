@@ -74,7 +74,7 @@ export async function oauth(provider: any) {
 
     // type-casting here for convenience
     // in practice, you should validate your inputs
-    let { data, error }: any = await supabase.auth.signInWithOAuth({
+    const { data, error }: any = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
             redirectTo: "http://localhost:3000/auth/confirm",

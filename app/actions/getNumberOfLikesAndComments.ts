@@ -19,7 +19,7 @@ export async function getNumberOfLikesAndComments(article_id: string) {
                 .select()
                 .eq("article_id", article_id)
                 .eq("type", "comment");
-            if (!secondError?.message)
+            if (!secondError?.message) {
                 if (likes && comments) {
                     const nOfLikes: number = likes.length;
                     const nOfComments: number = comments.length;
@@ -32,6 +32,9 @@ export async function getNumberOfLikesAndComments(article_id: string) {
                 } else {
                     throw secondError;
                 }
+            } else {
+                throw secondError;
+            }
         } else {
             throw firstError;
         }

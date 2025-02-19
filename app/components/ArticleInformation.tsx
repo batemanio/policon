@@ -2,54 +2,60 @@
 
 import styles from "./ArticleInformation.module.scss";
 import { like } from "../actions/like";
-import { useCallback, useEffect, useState } from "react";
-import { formatDate } from "../functions/formatDate";
+import { useState } from "react";
+import { formatDate } from "../actions/formatDate";
 import Link from "next/link";
 import { article } from "../types/dbTables";
-import { getNumberOfLikesAndComments } from "../actions/getNumberOfLikesAndComments";
-import { getUsername } from "../actions/getUsername";
-import { isLiked } from "../actions/isLiked";
-import { createClient } from "@/utils/supabase/client";
-
-type clientLike = [number, boolean];
 
 export default function ArticleInformation({
     article,
     fullVersion,
+    liked,
+    numberOfLikesAndComments,
+    username,
 }: {
     article: article;
     fullVersion: boolean;
+    liked: boolean;
+    numberOfLikesAndComments: number[];
+    username: string;
 }) {
-    const [likes, setLikes] = useState<clientLike>([0, false]);
-    const [comments, setComments] = useState<clientLike>([0, false]);
-    const [username, setUsername] = useState<string>("");
+    const [likes, setLikes] = useState<number>(numberOfLikesAndComments[0]);
+    const [likedState, setLikedState] = useState<boolean>(liked);
 
-    useEffect(() => {
-        async function getUserId() {
-            const supabase = createClient();
+    const comments = numberOfLikesAndComments[1];
 
-            const { data: user, error } = await supabase.auth.getUser();
-            if (error) {
-                console.log(error);
-            }
-            if (user.user && article.id) {
-                const liked = await isLiked(article.id, user.user.id);
-            }
-        }
-        getUserId();
-        if (article.id) {
-            getNumberOfLikesAndComments(article.id).then((res: any) => {
-                setLikes([res.content[0], false]);
-                setComments([res.content[1], false]);
-            });
+    // useEffect(() => {
+    //     async function getUserId() {
+    //         const supabase = createClient();
 
-            getUsername(article.user_id).then((res: any) => {
-                if (res.type === "success") {
-                    setUsername(res.content[0].username);
-                }
-            });
-        }
-    }, []);
+    //         const { data: user, error } = await supabase.auth.getUser();
+    //         if (error) {
+    //             console.log(error);
+    //         }
+    //         if (user.user && article.id) {
+    //             const liked = !(await isLiked(article.id, user.user.id));
+    //             if (liked) {
+    //                 setLikedState(true);
+    //             } else {
+    //                 setLikedState(false);
+    //             }
+    //         }
+    //     }
+    //     getUserId();
+    //     if (article.id) {
+    //         getNumberOfLikesAndComments(article.id).then((res: any) => {
+    //             setLikes(res.content[0]);
+    //             setComments(res.content[1]);
+    //         });
+
+    //         getUsername(article.user_id).then((res: any) => {
+    //             if (res.type === "success") {
+    //                 setUsernameState(res.content[0].username);
+    //             }
+    //         });
+    //     }
+    // }, []);
 
     const authorLink = `/writers/${article.user_id}`;
 
@@ -57,11 +63,13 @@ export default function ArticleInformation({
         if (article.id) {
             like(article.id, 1).then((res: any) => {
                 if (res.type === "success") {
-                    if (!res.content) {
-                        setLikes([(likes[0] += 1), true]);
+                    if (res.content) {
+                        setLikes(likes + 1);
+                        setLikedState(true);
                     } else {
-                        if (likes[0] > 0) {
-                            setLikes([(likes[0] -= 1), false]);
+                        if (likes > 0) {
+                            setLikes(likes - 1);
+                            setLikedState(false);
                         }
                     }
                 }
@@ -81,12 +89,6 @@ export default function ArticleInformation({
             </Link>
             <br />
             <span>Published {formatDate(article.created_at)}</span>
-            {/* {fullVersion && (
-                <>
-                    <br />
-                    <span>Edited {formatDate(article.updatedAt)}</span>
-                </>
-            )} */}
             <br />
             <br />
             {article.tags.map((tag: any, index: number) => (
@@ -100,17 +102,15 @@ export default function ArticleInformation({
                 <span
                     onClick={clientLike}
                     className={`${
-                        !likes[1] ? "far fa-thumbs-up" : "fas fa-thumbs-up"
+                        !likedState ? "far fa-thumbs-up" : "fas fa-thumbs-up"
                     } ${styles.thumbsUp}`}
                 ></span>
-                <span className={styles.likes}>{likes[0]}</span>
+                <span className={styles.likes}>{likes}</span>
 
                 <span
-                    className={`${
-                        !comments[1] ? "far fa-comment" : "fas fa-comment"
-                    } ${styles.commentsIcon}`}
+                    className={`far fa-comment ${styles.commentsIcon}`}
                 ></span>
-                <span className={styles.comments}>{comments[0]}</span>
+                <span className={styles.comments}>{comments}</span>
             </div>
 
             {fullVersion && (

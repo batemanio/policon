@@ -20,8 +20,8 @@ export async function like(article_id: string, increment: number) {
 
                 const liked = await isLiked(article_id, user_id);
 
-                if (liked) {
-                    let interaction: interaction = {
+                if (liked.content) {
+                    const interaction: interaction = {
                         user_id: user_id,
                         article_id: article_id,
                         type: "like",
@@ -49,7 +49,7 @@ export async function like(article_id: string, increment: number) {
 
                 const returnData: apiError = {
                     type: "success",
-                    content: !liked,
+                    content: liked.content,
                 };
                 return returnData;
             }

@@ -1,15 +1,14 @@
-import { ArticlesModel } from "../../models/articles";
-import { FullArticle } from "@/app/components/FullArticle";
+import { FullArticleServer } from "@/app/components/FullArticleServer";
+import { LoadingSpinner } from "@/app/components/LoadingSpinner";
 import { Suspense } from "react";
-import { LoadingPage } from "@/app/components/LoadingPage";
 
-export default async function Page({ params }: any) {
-    const article: any = await ArticlesModel.findOne({ _id: params?.id });
+export default async function Page({ params }: { params: { id: string } }) {
+    const { id: article_id } = params;
 
     return (
         <>
-            <Suspense fallback={<LoadingPage />}>
-                <FullArticle article={JSON.stringify(article)} />
+            <Suspense fallback={<LoadingSpinner />}>
+                <FullArticleServer article_id={article_id} />
             </Suspense>
         </>
     );

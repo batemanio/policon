@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { login, signup, oauth } from "../actions/login";
 import styles from "./page.module.scss";
 import { useSearchParams } from "next/navigation";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
-export default function LoginPage() {
+function LoginPage() {
     const searchParams = useSearchParams();
     const errorParam = searchParams.get("error");
 
@@ -69,5 +70,13 @@ export default function LoginPage() {
             </div>
             <p className={styles.error}>{error}</p>
         </div>
+    );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <LoginPage />
+        </Suspense>
     );
 }

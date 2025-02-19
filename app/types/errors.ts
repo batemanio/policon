@@ -7,6 +7,6 @@ export type dbError = {
 
 export type apiError = {
     type: string;
-    error?: string | dbError;
+    error?: any;
     content?: any;
 };

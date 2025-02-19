@@ -1,6 +1,6 @@
 "use server";
 
-import { comment, content } from "../types/dbTables";
+import { comment } from "../types/dbTables";
 import { createClient } from "@/utils/supabase/server";
 import { apiError } from "../types/errors";
 
@@ -15,17 +15,15 @@ export async function uploadComment(newComment: string, article_id: string) {
         if (user.user) {
             const user_id = user.user.id;
 
-            const content: content = { type: "text", data: newComment };
-
             const comment: comment = {
                 user_id: user_id,
                 article_id: article_id,
-                content: [content],
+                content: newComment,
             };
 
             if (newComment.length > 0) {
                 if (newComment.length <= 500) {
-                    const { data, error } = await supabase
+                    const { error } = await supabase
                         .from("comments")
                         .insert(comment);
 
@@ -36,16 +34,19 @@ export async function uploadComment(newComment: string, article_id: string) {
                             .eq("article_id", article_id);
 
                     if (!error?.message && !updatedError) {
-                        return {
+                        const returnData: apiError = {
                             type: "success",
                             content: updatedData,
                         };
+                        return returnData;
                     } else {
                         if (error?.message) {
                             throw error;
                         }
                         if (updatedError?.message) {
                             throw updatedError;
+                        } else {
+                            throw "upload comments ERROR";
                         }
                     }
                 } else {
@@ -62,6 +63,8 @@ export async function uploadComment(newComment: string, article_id: string) {
                 };
                 return returnData;
             }
+        } else {
+            throw "upload comments ERROR";
         }
     } catch (error) {
         console.log(error);

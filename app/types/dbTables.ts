@@ -1,5 +1,3 @@
-export type content = { type: string; data: string };
-
 export type article = {
     id?: string;
     created_at?: string;
@@ -8,7 +6,7 @@ export type article = {
     sub_title: string;
     tags: string[];
     user_id: string;
-    content: Array<content>;
+    content: string;
     image: string;
 };
 
@@ -18,7 +16,7 @@ export type profile = {
     edited_at?: string;
     username: string;
     full_name: string;
-    bio: Array<content>;
+    bio: string;
     avatar_url: string;
 };
 
@@ -43,7 +41,7 @@ export type comment = {
     edited_at?: string;
     article_id: string;
     user_id: string;
-    content: Array<content>;
+    content: string;
 };
 
 export type user_role = {
@@ -57,3 +55,5 @@ export type role_permission = {
     role: string;
     permission: string;
 };
+
+export type buckets = "avatars" | "article_images";

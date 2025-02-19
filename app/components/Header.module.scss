@@ -136,10 +136,11 @@
     border: 4px solid lightblue;
     margin-right: -2px;
     margin-top: -2px;
+    object-fit: cover;
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 860px) {
     .mobileItems {
         display: block;
     }
@@ -150,7 +151,7 @@
     }
 }
 
-@media screen and (max-width: 410px) {
+@media screen and (max-width: 470px) {
     .header {
         h1 {
             display: none;
@@ -158,7 +159,7 @@
     }
 }
 
-@media screen and (max-width: 240px) {
+@media screen and (max-width: 295px) {
     .socialMediaIcons {
         display: none;
     }

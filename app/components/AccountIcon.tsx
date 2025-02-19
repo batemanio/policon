@@ -1,11 +1,11 @@
 "use client";
 
-import Avatar from "../account/avatar";
 import styles from "./Header.module.scss";
 import { type User } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { downloadImage } from "../actions/downloadImage";
+import Image from "next/image";
 
 export function AccountIcon({ user }: { user: User | null }) {
     const supabase = createClient();
@@ -48,8 +48,8 @@ export function AccountIcon({ user }: { user: User | null }) {
 
     useEffect(() => {
         if (avatarUrl) {
-            downloadImage(avatarUrl, supabase).then((res: any) => {
-                setImageAvatarUrl(res);
+            downloadImage(avatarUrl).then((res: any) => {
+                setImageAvatarUrl(res.content);
             });
         }
     }, [avatarUrl]);
@@ -57,7 +57,9 @@ export function AccountIcon({ user }: { user: User | null }) {
     if (!loading) {
         if (imageAvatarUrl) {
             return (
-                <img
+                <Image
+                    width={45}
+                    height={45}
                     src={imageAvatarUrl}
                     alt="Avatar"
                     className={styles.profilePicture}

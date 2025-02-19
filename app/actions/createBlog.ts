@@ -1,36 +1,25 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { article, content } from "../types/dbTables";
+import { article } from "../types/dbTables";
 import { apiError } from "../types/errors";
+import {
+    bodyMaxLength,
+    subTitleMaxLength,
+    tagMaxLength,
+    tagsMaxLength,
+    titleMaxLength,
+} from "../config/dbMaxLengths";
 
-function checkArrayLegths(body: [content], tags: string[], toShort: boolean) {
+function checkArrayLegths(tags: string[], toShort: boolean) {
     let error = false;
-    let bodySectionTextLength = 0;
-    let bodySectionImageLength = 0;
-    if (!toShort) {
-        bodySectionTextLength = 5000;
-        bodySectionImageLength = 400;
-    }
 
-    for (let i = 0; i < body.length; i++) {
-        let bodySection: any = body[i];
-        if (bodySection.text) {
-            bodySection.text[0];
-        }
-        if (bodySection.image) {
-            bodySection.image[0];
-        }
-        if (
-            bodySection.length > bodySectionTextLength ||
-            bodySection.length > bodySectionImageLength
-        ) {
-            error = true;
-        }
-    }
     for (let i = 0; i < tags.length; i++) {
         const tagSection = tags[i];
-        if (tagSection.length > 15) {
+        if (tagSection.length > tagMaxLength && !toShort) {
+            error = true;
+        }
+        if (tagSection.length <= 0 && toShort) {
             error = true;
         }
     }
@@ -41,9 +30,9 @@ function checkArrayLegths(body: [content], tags: string[], toShort: boolean) {
 export async function createBlog(
     title: string,
     subTitle: string,
-    primaryImage: string,
+    primaryImageUrl: string,
     tags: string[],
-    body: [content]
+    body: string
 ) {
     const supabase = await createClient();
 
@@ -58,28 +47,28 @@ export async function createBlog(
             const article: article = {
                 title: title,
                 sub_title: subTitle,
-                image: primaryImage,
+                image: primaryImageUrl,
                 tags: tags,
                 user_id: user_id,
                 content: body,
             };
 
-            const checkArray: boolean = checkArrayLegths(body, tags, true);
             if (
                 title.length > 0 &&
                 subTitle.length > 0 &&
-                primaryImage.length > 0 &&
-                checkArray
+                primaryImageUrl.length > 0 &&
+                checkArrayLegths(tags, true)
             ) {
                 if (
-                    title.length <= 75 &&
-                    subTitle.length <= 125 &&
-                    primaryImage.length <= 400 &&
-                    checkArrayLegths(body, tags, false)
+                    title.length <= titleMaxLength &&
+                    subTitle.length <= subTitleMaxLength &&
+                    body.length <= bodyMaxLength &&
+                    tags.length <= tagsMaxLength &&
+                    checkArrayLegths(tags, false)
                 ) {
                     const supabase = await createClient();
 
-                    const { data, error } = await supabase
+                    const { error } = await supabase
                         .from("articles")
                         .insert(article)
                         .select();

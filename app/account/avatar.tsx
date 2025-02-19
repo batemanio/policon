@@ -1,85 +1,142 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+import React, { useState } from "react";
 import Image from "next/image";
-import { downloadImage } from "../actions/downloadImage";
 import styles from "./accountForm.module.scss";
+import { uploadToStorage } from "../actions/uploadToStorage";
+import { deleteInStorage } from "../actions/deleteInStorage";
+import { useRouter } from "next/navigation";
 
 export default function Avatar({
-    uid,
-    url,
-    size,
-    loading,
+    user_id,
+    avatar_url,
     onUpload,
+    setLoading,
     setError,
+    image,
+    loading,
 }: {
-    uid: string | null;
-    url: string | null;
-    size: number;
+    user_id: string | null;
+    avatar_url: string | null;
     onUpload: (url: string) => void;
-    loading: boolean;
+    setLoading: any;
     setError: any;
+    image: any;
+    loading: boolean;
 }) {
-    const supabase = createClient();
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(url);
-    const [uploading, setUploading] = useState(false);
+    const router = useRouter();
 
-    useEffect(() => {
-        if (url) {
-            downloadImage(url, supabase).then((res: any) => {
-                setAvatarUrl(res);
-            });
-        }
-    }, [url, supabase]);
-
-    let uploadAvatar;
-    if (onUpload) {
-        uploadAvatar = async (event: any) => {
-            try {
-                setUploading(true);
-
-                if (!event.target.files || event.target.files.length === 0) {
-                    throw new Error("You must select an image to upload.");
-                }
-
-                const file = event.target.files[0];
-                const fileExt = file.name.split(".").pop();
-                const filePath = `${uid}-${Math.random()}.${fileExt}`;
-
-                const { error: uploadError } = await supabase.storage
-                    .from("avatars")
-                    .upload(filePath, file);
-
-                if (uploadError) {
-                    throw uploadError;
-                }
-
-                onUpload(filePath);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setUploading(false);
-            }
-        };
+    let tempAvatarUrl: null | string;
+    if (image) {
+        tempAvatarUrl = image.content;
+    } else {
+        tempAvatarUrl = null;
     }
+    // const supabase = createClient();
+
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(tempAvatarUrl);
+    // const [uploading, setUploading] = useState(false);
+
+    // useEffect(() => {
+    //     if (avatar_url) {
+    //         downloadImage(avatar_url, supabase).then((res: any) => {
+    //             setAvatarUrl(res);
+    //         });
+    //     }
+    // }, [avatar_url, supabase]);
+
+    // useEffect(() => {
+    //     console.log("url", avatarUrl);
+    // }, [avatarUrl]);
+
+    function uploadAvatarClient(event: any) {
+        setLoading(true);
+
+        if (user_id) {
+            const file = event.target.files[0];
+            const fileExt = file.name.split(".").pop();
+            const filePath = `_${user_id}-${Math.random()}.${fileExt}`;
+            if (filePath) {
+                uploadToStorage(filePath, file, "avatars").then((res: any) => {
+                    if (res.type === "success") {
+                        if (avatar_url) {
+                            deleteInStorage(avatar_url, "avatars").then(
+                                (res: any) => {
+                                    const fullUrl =
+                                        process.env.NEXT_PUBLIC_SUPABASE_URL +
+                                        "/storage/v1/object/public/" +
+                                        res.content.fullPath;
+                                    setAvatarUrl(fullUrl);
+                                    onUpload(filePath);
+
+                                    location.reload();
+                                    router.refresh();
+                                    setLoading(false);
+                                }
+                            );
+                        } else {
+                            location.reload();
+                            router.refresh();
+                            setLoading(false);
+                        }
+                    } else {
+                        console.log(res.error);
+                        setError(res);
+                    }
+                });
+            }
+        }
+    }
+
+    // let uploadAvatar;
+    // if (onUpload) {
+    //     uploadAvatar = async (event: any) => {
+    //         try {
+    //             setUploading(true);
+
+    //             if (
+    //                 !event.target.files ||
+    //                 event.target.files.length === 0
+    //             ) {
+    //                 throw new Error("You must select an image to upload.");
+    //             }
+
+    //             const file = event.target.files[0];
+    //             const fileExt = file.name.split(".").pop();
+    //             const filePath = `${user_id}-${Math.random()}.${fileExt}`;
+
+    //             const { error: uploadError } = await supabase.storage
+    //                 .from("avatars")
+    //                 .upload(filePath, file);
+
+    //             if (uploadError) {
+    //                 throw uploadError;
+    //             }
+
+    //             onUpload(filePath);
+    //         } catch (error) {
+    //             setError(error);
+    //         } finally {
+    //             setUploading(false);
+    //         }
+    //     };
+    // }
+
+    // console.log(avatarUrl);
+
     return (
         <div style={{ marginBottom: "10px" }}>
-            {!loading ? (
-                avatarUrl ? (
-                    <Image
-                        width={size}
-                        height={size}
-                        src={avatarUrl}
-                        alt="Avatar"
-                        className={styles.avatar}
-                    />
-                ) : (
-                    <div style={{ height: size, width: size }}>
-                        <p>No avatar</p>
-                    </div>
-                )
+            {avatarUrl ? (
+                <Image
+                    width={200}
+                    height={200}
+                    src={avatarUrl}
+                    alt="Avatar"
+                    className={styles.avatar}
+                />
             ) : (
-                <p>loading</p>
+                <div>
+                    <p>No avatar</p>
+                </div>
             )}
             <div>
                 <label
@@ -87,7 +144,7 @@ export default function Avatar({
                     className={styles.button}
                     htmlFor="single"
                 >
-                    {uploading ? "Uploading ..." : "Upload Avatar"}
+                    {avatarUrl ? "Update Avatar" : "Upload Avatar"}
                 </label>
                 <input
                     style={{
@@ -97,8 +154,10 @@ export default function Avatar({
                     type="file"
                     id="single"
                     accept="image/*"
-                    onChange={uploadAvatar}
-                    disabled={uploading}
+                    onChange={(e: any) => {
+                        uploadAvatarClient(e);
+                    }}
+                    disabled={loading}
                 />
             </div>
         </div>

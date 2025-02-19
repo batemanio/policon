@@ -1,11 +1,15 @@
+import { comment } from "../types/dbTables";
 import { AddComment } from "./AddComment";
 import styles from "./FullArticle.module.scss";
 import { ListComments } from "./ListComments";
 
-export default function Comments(article: any) {
-    article = article.article;
-    const comments: string[] = article.comments;
-
+export default function Comments({
+    comments,
+    setComments,
+}: {
+    comments: Array<comment>;
+    setComments: any;
+}) {
     return (
         <div className={styles.comments}>
             <br />
@@ -21,7 +25,7 @@ export default function Comments(article: any) {
                     No comments yet - Leave a comment
                 </p>
             )}
-            <AddComment />
+            <AddComment setComments={setComments} />
             <hr style={{ width: "90%" }} />
         </div>
     );
