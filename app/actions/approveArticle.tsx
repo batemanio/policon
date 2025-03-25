@@ -7,7 +7,7 @@ export async function approveArticle(approved_article_id: string) {
     try {
         const supabase = await createClient();
 
-        let { data: approved_article, error } = await supabase
+        const { data: approved_article, error } = await supabase
             .from("draft_articles")
             .select()
             .eq("id", approved_article_id);

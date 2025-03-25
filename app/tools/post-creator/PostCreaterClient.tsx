@@ -38,8 +38,7 @@ export function PostCreatorClient({
     const [bodyValue, setBodyValue] = useState("");
     const [bodyLength, setBodyLength] = useState(0);
     const [currentDraft, setCurrentDraft] = useState("new");
-    const [draftArticlesHook, setDraftArticlesHook] =
-        useState<Array<draft_article>>(draftArticles);
+    const [draftArticlesHook] = useState<Array<draft_article>>(draftArticles);
     const [isSaved, setIsSaved] = useState<boolean>(true);
 
     useEffect(() => {
@@ -290,10 +289,7 @@ export function PostCreatorClient({
                         <option value="new">Create New</option>
                         {draftArticlesHook.map(
                             (draftArticle: draft_article, index: number) => (
-                                <option
-                                    key={draftArticle.id}
-                                    value={draftArticle.id}
-                                >
+                                <option key={index} value={draftArticle.id}>
                                     {draftArticle.title}
                                 </option>
                             )

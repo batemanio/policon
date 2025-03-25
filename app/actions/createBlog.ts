@@ -6,7 +6,6 @@ import { apiError } from "../types/errors";
 import {
     bodyMaxLength,
     subTitleMaxLength,
-    tagMaxLength,
     tagsMaxLength,
     titleMaxLength,
 } from "../config/dbMaxLengths";
@@ -34,7 +33,7 @@ export async function createBlog(
         if (user) {
             const user_id: string = user.id;
 
-            let article: article = {
+            const article: article = {
                 title: title,
                 sub_title: subTitle,
                 image: primaryImageUrl,
@@ -43,7 +42,7 @@ export async function createBlog(
                 content: body,
             };
 
-            let draft_article: draft_article = {
+            const draft_article: draft_article = {
                 title: title,
                 sub_title: subTitle,
                 image: primaryImageUrl,
@@ -54,8 +53,11 @@ export async function createBlog(
             };
 
             let insertData;
-            table.table === "articles" && (insertData = article);
-            table.table === "draft_articles" && (insertData = draft_article);
+            if (table.table === "articles") {
+                insertData = article;
+            } else if (table.table === "draft_articles") {
+                insertData = draft_article;
+            }
 
             if (
                 title.length > 0 &&

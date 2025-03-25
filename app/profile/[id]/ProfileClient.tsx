@@ -59,7 +59,8 @@ export function ProfileClient({
                         ></Image>
                         <p className={styles.username}>
                             Welcome to
-                            <span>{profile.username}</span>'s profile
+                            <span>{profile.username}</span>
+                            {`'s profile`}
                         </p>
                         <div className={styles.buttons}>
                             <button

@@ -1,10 +1,9 @@
 import styles from "./page.module.scss";
-import { Fredoka, Lexend_Deca, Zain, Caveat } from "next/font/google";
+import { Fredoka, Lexend_Deca, Caveat } from "next/font/google";
 // import { jwtDecode } from "jwt-decode";
 // import { createClient } from "@/utils/supabase/server";
 import * as motion from "motion/react-client";
 import Link from "next/link";
-import { IoCloseOutline } from "react-icons/io5";
 
 const fredoka = Fredoka({
     subsets: ["latin"],
@@ -27,18 +26,6 @@ const lexend_Deca = Lexend_Deca({
     subsets: ["latin"],
     display: "swap",
     weight: "700",
-});
-
-const thin_lexend_Deca = Lexend_Deca({
-    subsets: ["latin"],
-    display: "swap",
-    weight: "300",
-});
-
-const zian = Zain({
-    subsets: ["latin"],
-    display: "swap",
-    weight: "400",
 });
 
 export default async function Home() {
