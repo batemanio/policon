@@ -353,7 +353,7 @@ export function PostCreatorClient({
                                 onInit={handleInit}
                                 onEditorChange={handleUpdate}
                                 onBeforeAddUndo={handleBeforeAddUndo}
-                                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                                // tinymceScriptSrc="/tinymce/tinymce.min.js"
                                 // licenseKey="your-license-key"
                                 apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
                                 init={{
