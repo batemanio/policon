@@ -8,6 +8,7 @@ import { apiError } from "../types/errors";
 import { profile } from "../types/dbTables";
 import { updateProfile } from "../actions/updateProfile";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import Link from "next/link";
 
 export default function AccountFormClient({
     user,
@@ -108,6 +109,7 @@ export default function AccountFormClient({
                     setAvatarUrl(used_avatar_url);
                     setBio(profile.bio);
                     setError(res);
+                    location.reload();
                 }
                 setLoading(false);
             });
@@ -181,6 +183,10 @@ export default function AccountFormClient({
                     onChange={(e) => setBio(e.target.value)}
                 />
             </div>
+
+            <Link href={`/profile/${user_id}`}>
+                <h2>View public profile</h2>
+            </Link>
 
             <div>
                 <button

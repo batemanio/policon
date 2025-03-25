@@ -16,9 +16,11 @@
         "fs-extra": "^11.3.0",
         "html-react-parser": "^5.2.2",
         "jwt-decode": "^4.0.0",
+        "motion": "^12.4.7",
         "next": "^14.2.13",
         "react": "^18",
         "react-dom": "^18",
+        "react-icons": "^5.5.0",
         "react-loader-spinner": "^6.1.6",
         "sass": "^1.79.3",
         "tinymce": "^7.6.1"

@@ -57,13 +57,22 @@ export default function ArticleInformation({
     //     }
     // }, []);
 
-    const authorLink = `/writers/${article.user_id}`;
+    const authorLink = `/profile/${article.user_id}`;
 
     function clientLike() {
+        if (!likedState) {
+            setLikes(likes + 1);
+            setLikedState(true);
+        } else {
+            if (likes > 0) {
+                setLikes(likes - 1);
+                setLikedState(false);
+            }
+        }
         if (article.id) {
             like(article.id, 1).then((res: any) => {
-                if (res.type === "success") {
-                    if (res.content) {
+                if (res.type === "error") {
+                    if (!likedState) {
                         setLikes(likes + 1);
                         setLikedState(true);
                     } else {

@@ -3,6 +3,7 @@
 import { comment } from "../types/dbTables";
 import { createClient } from "@/utils/supabase/server";
 import { apiError } from "../types/errors";
+import { commentMaxLength } from "../config/dbMaxLengths";
 
 export async function uploadComment(newComment: string, article_id: string) {
     try {
@@ -22,32 +23,33 @@ export async function uploadComment(newComment: string, article_id: string) {
             };
 
             if (newComment.length > 0) {
-                if (newComment.length <= 500) {
-                    const { error } = await supabase
+                if (newComment.length <= commentMaxLength) {
+                    const { data: newComment, error } = await supabase
                         .from("comments")
-                        .insert(comment);
+                        .insert(comment)
+                        .select();
 
-                    const { data: updatedData, error: updatedError } =
-                        await supabase
-                            .from("comments")
-                            .select("*")
-                            .eq("article_id", article_id);
+                    // const { data: updatedData, error: updatedError } =
+                    //     await supabase
+                    //         .from("comments")
+                    //         .select()
+                    //         .eq("article_id", article_id);
 
-                    if (!error?.message && !updatedError) {
+                    if (!error?.message && newComment) {
                         const returnData: apiError = {
                             type: "success",
-                            content: updatedData,
+                            content: newComment[0],
                         };
                         return returnData;
                     } else {
-                        if (error?.message) {
-                            throw error;
-                        }
-                        if (updatedError?.message) {
-                            throw updatedError;
-                        } else {
-                            throw "upload comments ERROR";
-                        }
+                        // if (error?.message) {
+                        throw error;
+                        // }
+                        // if (updatedError?.message) {
+                        //     throw updatedError;
+                        // } else {
+                        //     throw "upload comments ERROR";
+                        // }
                     }
                 } else {
                     const returnData: apiError = {

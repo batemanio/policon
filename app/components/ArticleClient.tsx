@@ -59,7 +59,7 @@ export function ArticleClient({
                             numberOfLikesAndComments={
                                 numberOfLikesAndComments.content
                             }
-                            username={username.content.username}
+                            username={username.content}
                             fullVersion={false}
                         />
                     </div>

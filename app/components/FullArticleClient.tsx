@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { article, comment } from "../types/dbTables";
 import { apiError } from "../types/errors";
 import ArticleInformation from "./ArticleInformation";
@@ -14,18 +13,18 @@ export function FullArticleClient({
     liked,
     numberOfLikesAndComments,
     username,
-    serverComments,
+    commentsWithUsernames,
+    numberOfComments,
+    currentPage,
 }: {
     article: article;
     liked: apiError;
     numberOfLikesAndComments: apiError;
     username: apiError;
-    serverComments: apiError;
+    commentsWithUsernames: Array<{ comment: comment; username: string }>;
+    numberOfComments: number;
+    currentPage: number;
 }) {
-    const [comments, setComments] = useState<Array<comment>>(
-        serverComments.content
-    );
-
     return (
         <div className={styles.article}>
             <Image
@@ -41,11 +40,15 @@ export function FullArticleClient({
                 article={article}
                 liked={!liked.content}
                 numberOfLikesAndComments={numberOfLikesAndComments.content}
-                username={username.content.username}
+                username={username.content}
                 fullVersion={true}
             />
             <div>{parse(article.content)}</div>
-            <Comments setComments={setComments} comments={comments} />
+            <Comments
+                commentsWithUsernames={commentsWithUsernames}
+                numberOfComments={numberOfComments}
+                currentPage={currentPage}
+            />
         </div>
     );
 }

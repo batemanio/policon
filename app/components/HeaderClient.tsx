@@ -30,7 +30,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                 <Link href="/">
                     <div>
                         <Image
-                            src="https://upload.wikimedia.org/wikipedia/commons/2/24/LEGO_logo.svg"
+                            src="/logo.png"
                             width={60}
                             height={60}
                             alt="Logo"

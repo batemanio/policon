@@ -1,15 +1,21 @@
+import { useState } from "react";
 import { comment } from "../types/dbTables";
 import { AddComment } from "./AddComment";
 import styles from "./FullArticle.module.scss";
 import { ListComments } from "./ListComments";
+import { PageSelectors } from "./PageSelectors";
 
 export default function Comments({
-    comments,
-    setComments,
+    commentsWithUsernames,
+    numberOfComments,
+    currentPage,
 }: {
-    comments: Array<comment>;
-    setComments: any;
+    commentsWithUsernames: Array<{ comment: comment; username: string }>;
+    numberOfComments: number;
+    currentPage: number;
 }) {
+    const [comments, setComments] = useState(commentsWithUsernames);
+
     return (
         <div className={styles.comments}>
             <br />
@@ -25,7 +31,11 @@ export default function Comments({
                     No comments yet - Leave a comment
                 </p>
             )}
-            <AddComment setComments={setComments} />
+            <PageSelectors
+                numberOfItems={numberOfComments}
+                currentPage={currentPage}
+            />
+            <AddComment setComments={setComments} comments={comments} />
             <hr style={{ width: "90%" }} />
         </div>
     );

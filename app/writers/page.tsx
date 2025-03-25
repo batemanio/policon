@@ -10,6 +10,12 @@ export default function Writers() {
             <Link href="/tools/post-creator">
                 <button>Create a post</button>
             </Link>
+            <Link href="/tools/post-approver">
+                <button>Approve posts</button>
+            </Link>
+            <Link href="/tools/approved-posts">
+                <button>Approved posts</button>
+            </Link>
         </>
     );
 }

@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { apiError } from "../types/errors";
 
-export async function downloadImage(path: string) {
+export async function getAvatarUrl(path: string) {
     try {
         const supabase = await createClient();
 

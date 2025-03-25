@@ -10,6 +10,19 @@ export type article = {
     image: string;
 };
 
+export type draft_article = {
+    id?: string;
+    created_at?: string;
+    edited_at?: string;
+    title: string;
+    sub_title: string;
+    tags: string[];
+    user_id: string;
+    content: string;
+    image: string;
+    status: "draft" | "pending" | "approved";
+};
+
 export type profile = {
     id?: string;
     created_at?: string;

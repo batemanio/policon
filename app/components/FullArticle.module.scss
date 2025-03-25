@@ -36,12 +36,30 @@
 }
 
 .comments {
-    font-family: Verdana, sans-serif;
+    margin: 5px;
 }
 
 .comment {
     margin-top: -10px;
     font-size: 20px;
+    text-align: left;
+}
+
+.username {
+    margin-bottom: 0;
+    font-size: 15px;
+}
+
+.date {
+    margin-top: 0;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.content {
+    text-indent: 30px;
+    font-size: 20px;
+    margin-top: 0;
 }
 
 .addComment {

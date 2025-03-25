@@ -7,31 +7,29 @@ export async function getNumberOfLikesAndComments(article_id: string) {
     try {
         const supabase = await createClient();
 
-        const { data: likes, error: firstError } = await supabase
+        const { count: likes, error: firstError } = await supabase
             .from("interactions")
-            .select()
+            .select("*", { count: "exact", head: true })
             .eq("article_id", article_id)
             .eq("type", "like");
 
         if (!firstError?.message) {
-            const { data: comments, error: secondError } = await supabase
-                .from("interactions")
-                .select()
-                .eq("article_id", article_id)
-                .eq("type", "comment");
-            if (!secondError?.message) {
-                if (likes && comments) {
-                    const nOfLikes: number = likes.length;
-                    const nOfComments: number = comments.length;
+            const { count: comments, error: secondError } = await supabase
+                .from("comments")
+                .select("*", { count: "exact", head: true })
+                .eq("article_id", article_id);
 
-                    const returnData: apiError = {
-                        type: "success",
-                        content: [nOfLikes, nOfComments],
-                    };
-                    return returnData;
-                } else {
-                    throw secondError;
-                }
+            if (!secondError?.message) {
+                // if (likes && comments) {
+
+                const returnData: apiError = {
+                    type: "success",
+                    content: [likes, comments],
+                };
+                return returnData;
+                // } else {
+                //     throw secondError;
+                // }
             } else {
                 throw secondError;
             }

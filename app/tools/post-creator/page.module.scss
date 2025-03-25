@@ -117,7 +117,7 @@
 
 @keyframes shake {
     25% {
-        transform: rotate(10deg);
+        transform: rotate(3deg);
     }
 
     50% {
@@ -125,7 +125,7 @@
     }
 
     75% {
-        transform: rotate(-10deg);
+        transform: rotate(-3deg);
     }
 
     100% {

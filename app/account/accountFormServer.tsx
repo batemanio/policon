@@ -1,7 +1,7 @@
 import AccountFormClient from "./accountFormClient";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { downloadImage } from "../actions/downloadImage";
+import { getAvatarUrl } from "../actions/getAvatarUrl";
 import { apiError } from "../types/errors";
 
 export async function AccountFormServer() {
@@ -35,7 +35,7 @@ export async function AccountFormServer() {
             // else console.log(data);
 
             if (profile[0].avatar_url) {
-                const image: apiError = await downloadImage(
+                const image: apiError = await getAvatarUrl(
                     profile[0].avatar_url
                 );
 

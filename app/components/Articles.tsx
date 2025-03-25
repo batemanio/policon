@@ -2,23 +2,37 @@ import { article } from "../types/dbTables";
 import styles from "./Articles.module.scss";
 import { createClient } from "@/utils/supabase/server";
 import { ArticleServer } from "./ArticleServer";
+import { itemsPerPage } from "../config/itemsPerPage";
+import { PageSelectors } from "./PageSelectors";
 
-export async function Articles() {
+export async function Articles({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const currentPage = Number((await searchParams).page) | 1;
+
     const supabase: any = await createClient();
 
-    const { data: articles, error: error1 } = await supabase
+    const { data: articles, error: firstError } = await supabase
         .from("articles")
-        .select("*")
-        .range(0, 9);
-    if (error1) {
-        console.log(error1);
+        .select()
+        .range(
+            0 + (currentPage - 1) * 9,
+            itemsPerPage - 1 + (currentPage - 1) * 9
+        )
+        .order("created_at", { ascending: false });
+
+    if (firstError) {
+        console.log(firstError);
     }
 
-    const { data: user, error: error2 } = await supabase.auth.getUser();
+    const { count, error: secondError } = await supabase
+        .from("articles")
+        .select("*", { count: "exact", head: true });
 
-    const user_id = user.user.id;
-    if (error2) {
-        console.log(error2);
+    if (secondError) {
+        console.log(secondError);
     }
 
     return (
@@ -29,10 +43,12 @@ export async function Articles() {
                     <ArticleServer
                         key={index}
                         article={article}
-                        user_id={user_id}
                     ></ArticleServer>
                 ))}
-                {/* <Article article={JSON.stringify(articles[0])}></Article> */}
+                <PageSelectors
+                    currentPage={currentPage ? currentPage : 1}
+                    numberOfItems={count}
+                />
             </div>
         </>
     );

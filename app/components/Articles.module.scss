@@ -68,6 +68,30 @@
     margin-top: auto;
 }
 
+.pagesContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.page {
+    padding: 5px 15px;
+    font-size: 35px;
+    border-radius: 5px;
+    background-color: white;
+    text-align: center;
+    transition: 1s;
+    cursor: pointer;
+    margin: 5px;
+    margin-top: 20px;
+    color: black;
+    // box-shadow: 5px 5px 10px lightblue;
+}
+
+.page:hover {
+    color: aqua;
+    transform: translateY(-3px);
+}
+
 @media screen and (max-width: 1050px) {
     .article {
         grid-template-columns: 500px;
