@@ -17,7 +17,7 @@ export function Comment({
                 href={`/profile/${comment.comment.user_id}`}
                 className={styles.username}
             >
-                {comment.username}
+                <p className={styles.date}>{comment.username}</p>
             </Link>
             <p className={styles.date}>
                 {formatDate(comment.comment.created_at)}

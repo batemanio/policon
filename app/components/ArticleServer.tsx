@@ -4,9 +4,14 @@ import { isLiked } from "../actions/isLiked";
 import { article } from "../types/dbTables";
 import { ArticleClient } from "./ArticleClient";
 
-export async function ArticleServer({ article }: { article: article }) {
+export async function ArticleServer({
+    article,
+    user_id,
+}: {
+    article: article;
+    user_id: string;
+}) {
     if (article.id) {
-        const user_id = article.user_id;
         const liked = await isLiked(article.id, user_id);
 
         const numberOfLikesAndComments = await getNumberOfLikesAndComments(

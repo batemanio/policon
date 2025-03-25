@@ -60,11 +60,17 @@ export default function ArticleInformation({
     const authorLink = `/profile/${article.user_id}`;
 
     function clientLike() {
+        console.log(likes);
+        console.log(likedState);
+
         if (!likedState) {
+            console.log("hi 1 ");
             setLikes(likes + 1);
             setLikedState(true);
         } else {
+            console.log("hi 2");
             if (likes > 0) {
+                console.log("hi 2 true ");
                 setLikes(likes - 1);
                 setLikedState(false);
             }

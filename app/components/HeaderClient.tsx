@@ -106,27 +106,31 @@ export function HeaderClient({ user }: { user: User | null }) {
                 </section>
             </div>
 
-            {showMobileMenu && (
-                <div className={styles.mobileMenu}>
-                    <h1
-                        onClick={closeMobileMenu}
-                        className="material-symbols-outlined"
-                    >
-                        close
-                    </h1>
-                    <ul>
-                        <Link href="/">
-                            <li>Home</li>
-                        </Link>
-                        <Link href="/articles">
-                            <li>Articles</li>
-                        </Link>
-                        <Link href="/writers">
-                            <li>Writers</li>
-                        </Link>
-                    </ul>
-                </div>
-            )}
+            <div
+                className={styles.mobileMenu}
+                style={{
+                    opacity: showMobileMenu ? "1" : "0",
+                    zIndex: showMobileMenu ? "100" : "-100",
+                }}
+            >
+                <h1
+                    onClick={closeMobileMenu}
+                    className="material-symbols-outlined"
+                >
+                    close
+                </h1>
+                <ul>
+                    <Link href="/">
+                        <li>Home</li>
+                    </Link>
+                    <Link href="/articles">
+                        <li>Articles</li>
+                    </Link>
+                    <Link href="/writers">
+                        <li>Writers</li>
+                    </Link>
+                </ul>
+            </div>
         </>
     );
 }

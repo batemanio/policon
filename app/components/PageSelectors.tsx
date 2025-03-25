@@ -39,16 +39,18 @@ export function PageSelectors({
 }) {
     const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
 
-    return (
-        <div className={styles.pagesContainer}>
-            {[...Array(numberOfPages)].map((_, i) => (
-                <PageSelector
-                    numberOfPages={numberOfPages}
-                    currentPage={currentPage}
-                    key={i}
-                    pageNumber={i + 1}
-                />
-            ))}
-        </div>
-    );
+    if (numberOfPages > 1) {
+        return (
+            <div className={styles.pagesContainer}>
+                {[...Array(numberOfPages)].map((_, i) => (
+                    <PageSelector
+                        numberOfPages={numberOfPages}
+                        currentPage={currentPage}
+                        key={i}
+                        pageNumber={i + 1}
+                    />
+                ))}
+            </div>
+        );
+    }
 }
