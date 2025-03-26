@@ -35,7 +35,7 @@ export function PostApproverClient({
     return (
         <>
             <div>
-                <h2>{`Pending article's title:<`}</h2>
+                <h2>Pending articles title:</h2>
                 <select
                     onChange={(e) => {
                         setCurrentArticle(e);

@@ -92,6 +92,8 @@ export default function AccountFormClient({
             used_avatar_url = url;
         }
 
+        console.log("hi", used_avatar_url);
+
         if (username || fullname || used_avatar_url || bio) {
             updateProfile(
                 user_id,
@@ -123,7 +125,6 @@ export default function AccountFormClient({
                 user_id={user_id}
                 avatar_url={avatar_url}
                 onUpload={(url: string) => {
-                    // console.log("hi!!!!");
                     setAvatarUrl(url);
                     updateProfileClient(url);
                 }}

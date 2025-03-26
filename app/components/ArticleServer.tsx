@@ -2,6 +2,7 @@ import { getNumberOfLikesAndComments } from "../actions/getNumberOfLikesAndComme
 import { getUsername } from "../actions/getUsername";
 import { isLiked } from "../actions/isLiked";
 import { article } from "../types/dbTables";
+import { apiError } from "../types/errors";
 import { ArticleClient } from "./ArticleClient";
 
 export async function ArticleServer({
@@ -9,16 +10,17 @@ export async function ArticleServer({
     user_id,
 }: {
     article: article;
-    user_id: string;
+    user_id: string | false;
 }) {
     if (article.id) {
-        const liked = await isLiked(article.id, user_id);
+        const notLiked: apiError = { type: "success", content: true };
 
+        const liked = user_id ? await isLiked(article.id, user_id) : notLiked;
         const numberOfLikesAndComments = await getNumberOfLikesAndComments(
             article.id
         );
 
-        const username = await getUsername(user_id);
+        const username = await getUsername(article.user_id);
 
         if (numberOfLikesAndComments) {
             return (
@@ -27,6 +29,7 @@ export async function ArticleServer({
                     liked={liked}
                     numberOfLikesAndComments={numberOfLikesAndComments}
                     username={username}
+                    user_id={user_id}
                 />
             );
         }

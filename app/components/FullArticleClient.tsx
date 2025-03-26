@@ -16,6 +16,7 @@ export function FullArticleClient({
     commentsWithUsernames,
     numberOfComments,
     currentPage,
+    user_id,
 }: {
     article: article;
     liked: apiError;
@@ -24,6 +25,7 @@ export function FullArticleClient({
     commentsWithUsernames: Array<{ comment: comment; username: string }>;
     numberOfComments: number;
     currentPage: number;
+    user_id: string | false;
 }) {
     return (
         <div className={styles.article}>
@@ -37,6 +39,7 @@ export function FullArticleClient({
             <h1 className={styles.title}>{article.title}</h1>
             <p className={styles.subTitle}>{article.sub_title}</p>
             <ArticleInformation
+                user_id={user_id}
                 article={article}
                 liked={!liked.content}
                 numberOfLikesAndComments={numberOfLikesAndComments.content}

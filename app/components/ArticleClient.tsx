@@ -12,11 +12,13 @@ export function ArticleClient({
     liked,
     numberOfLikesAndComments,
     username,
+    user_id,
 }: {
     article: article;
     liked: apiError;
     numberOfLikesAndComments: apiError;
     username: apiError;
+    user_id: string | false;
 }) {
     const id = article.id;
     const articleLink = `/articles/${id}`;
@@ -61,6 +63,7 @@ export function ArticleClient({
                             }
                             username={username.content}
                             fullVersion={false}
+                            user_id={user_id}
                         />
                     </div>
                 </div>

@@ -74,6 +74,13 @@ export default function Avatar({
                                 }
                             );
                         } else {
+                            const fullUrl =
+                                process.env.NEXT_PUBLIC_SUPABASE_URL +
+                                "/storage/v1/object/public/" +
+                                res.content.fullPath;
+                            setAvatarUrl(fullUrl);
+                            onUpload(filePath);
+
                             location.reload();
                             router.refresh();
                             setLoading(false);

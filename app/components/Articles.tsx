@@ -35,10 +35,7 @@ export async function Articles({
         console.log(secondError);
     }
 
-    const { data: user, error } = await supabase.auth.getUser();
-    if (error) {
-        console.log(error);
-    }
+    const { data: user } = await supabase.auth.getUser();
 
     return (
         <>
@@ -48,7 +45,7 @@ export async function Articles({
                     <ArticleServer
                         key={index}
                         article={article}
-                        user_id={user.user.id}
+                        user_id={user?.user?.id || false}
                     ></ArticleServer>
                 ))}
                 <PageSelectors

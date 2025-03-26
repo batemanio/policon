@@ -13,12 +13,14 @@ export default function ArticleInformation({
     liked,
     numberOfLikesAndComments,
     username,
+    user_id,
 }: {
     article: article;
     fullVersion: boolean;
     liked: boolean;
     numberOfLikesAndComments: number[];
     username: string;
+    user_id: string | false;
 }) {
     const [likes, setLikes] = useState<number>(numberOfLikesAndComments[0]);
     const [likedState, setLikedState] = useState<boolean>(liked);
@@ -60,35 +62,31 @@ export default function ArticleInformation({
     const authorLink = `/profile/${article.user_id}`;
 
     function clientLike() {
-        console.log(likes);
-        console.log(likedState);
-
-        if (!likedState) {
-            console.log("hi 1 ");
-            setLikes(likes + 1);
-            setLikedState(true);
-        } else {
-            console.log("hi 2");
-            if (likes > 0) {
-                console.log("hi 2 true ");
-                setLikes(likes - 1);
-                setLikedState(false);
+        if (user_id) {
+            if (!likedState) {
+                setLikes(likes + 1);
+                setLikedState(true);
+            } else {
+                if (likes > 0) {
+                    setLikes(likes - 1);
+                    setLikedState(false);
+                }
             }
-        }
-        if (article.id) {
-            like(article.id, 1).then((res: any) => {
-                if (res.type === "error") {
-                    if (!likedState) {
-                        setLikes(likes + 1);
-                        setLikedState(true);
-                    } else {
-                        if (likes > 0) {
-                            setLikes(likes - 1);
-                            setLikedState(false);
+            if (article.id) {
+                like(article.id, 1).then((res: any) => {
+                    if (res.type === "error") {
+                        if (!likedState) {
+                            setLikes(likes + 1);
+                            setLikedState(true);
+                        } else {
+                            if (likes > 0) {
+                                setLikes(likes - 1);
+                                setLikedState(false);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

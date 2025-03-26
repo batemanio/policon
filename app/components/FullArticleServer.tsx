@@ -25,21 +25,22 @@ export async function FullArticleServer({
         console.log(firstError);
     }
 
-    const { data: user, error: secondError } = await supabase.auth.getUser();
-    if (secondError?.message) {
-        console.log(secondError);
-    }
+    const { data: user } = await supabase.auth.getUser();
 
-    if (user.user && article_id && article) {
-        const user_id = user.user.id;
+    if (article_id && article) {
+        const user_id = user.user?.id || false;
 
-        const liked = await isLiked(article_id, user_id);
+        const liked = user_id
+            ? await isLiked(article_id, user_id)
+            : { type: "success", content: true };
+
+        console.log();
 
         const numberOfLikesAndComments = await getNumberOfLikesAndComments(
             article_id
         );
 
-        const username = await getUsername(user_id);
+        const username = await getUsername(article[0].user_id);
 
         const comments = await getComments(article_id, currentPage);
 
@@ -64,6 +65,7 @@ export async function FullArticleServer({
 
         return (
             <FullArticleClient
+                user_id={user_id}
                 currentPage={currentPage}
                 numberOfComments={count ?? 0}
                 article={article[0]}
