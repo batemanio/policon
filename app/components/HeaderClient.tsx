@@ -38,7 +38,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                     </div>
                 </Link>
 
-                <h1>Policon</h1>
+                <h1>Eco-ders</h1>
                 <div className={styles.items}>
                     <Link href="/">
                         <h2
