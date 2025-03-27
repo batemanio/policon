@@ -30,7 +30,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                 <Link href="/">
                     <div>
                         <Image
-                            src="/logo.png"
+                            src="/logo.jpg"
                             width={60}
                             height={60}
                             alt="Logo"
