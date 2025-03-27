@@ -91,7 +91,7 @@ export function HeaderClient({ user }: { user: User | null }) {
 
                 <section className={styles.socialMediaIcons}>
                     <Link
-                        target="_blank" href="">
+                        target="_blank" href="/">
                         <span
                             className={`fab fa-tiktok ${styles.tiktok}`}
                         ></span>
