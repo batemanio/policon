@@ -61,12 +61,6 @@ function LoginPage() {
                     }}
                     className={`fa-brands fa-google ${styles.oauthProvider}`}
                 ></i>
-                <i
-                    onClick={() => {
-                        oauth("github");
-                    }}
-                    className={`fa-brands fa-github ${styles.oauthProvider}`}
-                ></i>
             </div>
             <p className={styles.error}>{error}</p>
         </div>
