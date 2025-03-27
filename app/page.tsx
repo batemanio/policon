@@ -55,7 +55,7 @@ export default async function Home() {
             <div className={styles.firstBackground}>
                 <div className={`${styles.firstSection} ${fredoka.className}`}>
                     <h1>
-                        <span>News</span> So{" "}
+                        <span>News</span> so{" "}
                         <strong className={fredokaStrong.className}>
                             You
                         </strong>{" "}
@@ -64,9 +64,6 @@ export default async function Home() {
                             Environment
                         </strong>
                     </h1>
-                    <p className={caveat.className}>
-                        Clean Articles that look as great as they read.
-                    </p>
                     <p className={caveat.className}>
                         This is how...
                     </p>
