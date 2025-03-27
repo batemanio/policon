@@ -103,7 +103,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                 >
                     close
                 </h1>
-                <ul>
+                <ul onClick={() => setShowMobileMenu(false)}>
                     <Link href="/">
                         <li>Home</li>
                     </Link>

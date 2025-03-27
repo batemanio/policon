@@ -1,0 +1,22 @@
+.info {
+    text-align: center;
+    font-size: 30px;
+
+    b {
+        font-size: 40px;
+    }
+}
+
+.applyButton {
+    border-radius: 5px;
+    border: 3px lightblue solid;
+    font-size: 60px;
+    cursor: pointer;
+    background-color: white;
+    margin-bottom: 15px;
+    transition: 1s;
+}
+
+.applyButton:hover {
+    background-color: rgb(200, 200, 200);
+}
