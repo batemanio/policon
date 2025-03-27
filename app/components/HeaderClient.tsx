@@ -88,19 +88,6 @@ export function HeaderClient({ user }: { user: User | null }) {
                         <AccountIcon user={user} />
                     </Link>
                 )}
-
-                <section className={styles.socialMediaIcons}>
-                    <Link target="_blank" href="">
-                        <span
-                            className={`fab fa-tiktok ${styles.tiktok}`}
-                        ></span>
-                    </Link>
-                    <Link target="_blank" href="">
-                        <span
-                            className={`fab fa-instagram ${styles.instagram}`}
-                        ></span>
-                    </Link>
-                </section>
             </div>
 
             <div
