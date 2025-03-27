@@ -9,7 +9,7 @@ const raleway = Raleway({
 });
 
 export const metadata: Metadata = {
-    title: "Policon",
+    title: "Eco-ders",
     description:
         "Empowering the youth through transparent political journalism",
 };
