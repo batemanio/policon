@@ -55,17 +55,20 @@ export default async function Home() {
             <div className={styles.firstBackground}>
                 <div className={`${styles.firstSection} ${fredoka.className}`}>
                     <h1>
-                        <span>News</span> By{" "}
+                        <span>News</span> So{" "}
                         <strong className={fredokaStrong.className}>
-                            Teens
+                            You
                         </strong>{" "}
-                        for{" "}
+                        can save the{" "}
                         <strong className={fredokaStrong.className}>
-                            Teens
+                            Environment
                         </strong>
                     </h1>
                     <p className={caveat.className}>
                         Clean Articles that look as great as they read.
+                    </p>
+                    <p className={caveat.className}>
+                        This is how...
                     </p>
                     <Link href="/articles">
                         <motion.button
