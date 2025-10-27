@@ -26,6 +26,11 @@ export async function approveArticle(approved_article_id: string) {
                 throw error;
             }
 
+            const { error: deleteError } = await supabase
+                .from("draft_articles")
+                .delete(approved_article[0])
+                .eq("id", approved_article_id);
+
             const returnData: apiError = {
                 type: "success",
             };

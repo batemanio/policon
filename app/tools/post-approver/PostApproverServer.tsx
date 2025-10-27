@@ -9,7 +9,5 @@ export async function PostApproverServer() {
         .select()
         .eq("status", "pending");
 
-    console.log(pendingArticles);
-
     return <PostApproverClient pendingArticles={pendingArticles.data || []} />;
 }

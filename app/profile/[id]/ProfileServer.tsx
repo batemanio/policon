@@ -14,7 +14,12 @@ export async function ProfileServer({ user_id }: { user_id: string }) {
         console.log(firstError);
     }
     if (profile) {
-        const avatar_url = await getAvatarUrl(profile[0].avatar_url);
+        const avatar_url_profile = profile[0].avatar_url;
+        const avatar_url = avatar_url_profile
+            ? (await getAvatarUrl(avatar_url_profile)).content
+            : "/no-avatar.png";
+
+        console.log(avatar_url);
 
         const { data: visiting_user, error: secondError } =
             await supabase.auth.getUser();
@@ -39,7 +44,7 @@ export async function ProfileServer({ user_id }: { user_id: string }) {
             return (
                 <ProfileClient
                     initFollowing={isFollowed}
-                    avatar_url={avatar_url.content}
+                    avatar_url={avatar_url}
                     profile={profile[0]}
                     user_id={user_id}
                 />
@@ -48,7 +53,7 @@ export async function ProfileServer({ user_id }: { user_id: string }) {
             return (
                 <ProfileClient
                     initFollowing={null}
-                    avatar_url={avatar_url.content}
+                    avatar_url={avatar_url}
                     profile={profile[0]}
                     user_id={user_id}
                 />

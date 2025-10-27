@@ -20,20 +20,21 @@ export function AddComment({
 
     const [comment, setComment] = useState<[string, number]>(["", 0]);
     const [error, setError] = useState<apiError>();
+    const [commentFocused, setCommentFocused] = useState<boolean>(false);
 
     function addComment() {
         if (comment[0].length > 0) {
             uploadComment(comment[0], params?.id).then((newComment) => {
                 if (newComment.type === "success") {
                     const supabase = createClient();
-                    supabase.auth.getUser().then((res) => {
+                    supabase.auth.getUser().then((res: any) => {
                         if (res.data) {
                             const user_id = res.data.user?.id;
                             supabase
                                 .from("profiles")
                                 .select("username")
                                 .eq("id", user_id)
-                                .then((res) => {
+                                .then((res: any) => {
                                     if (res.data) {
                                         const username: string =
                                             res.data[0].username;
@@ -47,12 +48,17 @@ export function AddComment({
                                         ];
                                         setComments(newComments);
                                         setComment(["", 0]);
+                                    } else {
+                                        setError(res);
                                     }
                                 });
+                        } else {
+                            setError(res);
                         }
                     });
+                } else {
+                    setError(newComment);
                 }
-                setError(newComment);
             });
         } else {
             const returnData: apiError = {
@@ -67,16 +73,33 @@ export function AddComment({
         <>
             <div className={styles.addComment}>
                 <textarea
+                    placeholder="Comment?"
+                    style={{ minHeight: commentFocused ? "" : "170px" }}
+                    onClick={() => {
+                        setCommentFocused(true);
+                    }}
                     onChange={(e: any) => {
                         setComment([e.target.value, e.target.value.length]);
                     }}
                     value={comment[0]}
                     maxLength={commentMaxLength}
                 ></textarea>
-                <p className={styles.characterCounter}>
-                    {comment[1]} / {commentMaxLength}
-                </p>
-                <button onClick={addComment}>Add comment</button>
+                {commentFocused && (
+                    <>
+                        <p className={styles.characterCounter}>
+                            {comment[1]} / {commentMaxLength}
+                        </p>
+                        <button
+                            onClick={() => {
+                                setCommentFocused(false);
+                                setError(undefined);
+                            }}
+                        >
+                            Cancel
+                        </button>
+                        <button onClick={addComment}>Comment</button>
+                    </>
+                )}
             </div>
             {/* {error?.type === "success" && (
                 <p className={styles.error} style={{ color: "green" }}>
@@ -85,7 +108,7 @@ export function AddComment({
             )} */}
             {error?.type === "error" && (
                 <p className={styles.error} style={{ color: "red" }}>
-                    Error: {error.error?.toString()}
+                    {error.error}
                 </p>
             )}
             {!error && (

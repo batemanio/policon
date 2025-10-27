@@ -22,7 +22,7 @@ export default function Comments({
             <br />
             <br />
             <br />
-            <hr style={{ width: "90%" }} />
+            <hr style={{ width: "100%" }} />
             <h1>Comments:</h1>
             {comments.length > 0 ? (
                 <ListComments comments={comments} />
@@ -36,7 +36,7 @@ export default function Comments({
                 currentPage={currentPage}
             />
             <AddComment setComments={setComments} comments={comments} />
-            <hr style={{ width: "90%" }} />
+            <hr style={{ width: "100%" }} />
         </div>
     );
 }

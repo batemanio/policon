@@ -6,6 +6,9 @@ import { useState } from "react";
 import { formatDate } from "../actions/formatDate";
 import Link from "next/link";
 import { article } from "../types/dbTables";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import * as motion from "motion/react-client";
 
 export default function ArticleInformation({
     article,
@@ -14,6 +17,7 @@ export default function ArticleInformation({
     numberOfLikesAndComments,
     username,
     user_id,
+    avatar_url,
 }: {
     article: article;
     fullVersion: boolean;
@@ -21,6 +25,7 @@ export default function ArticleInformation({
     numberOfLikesAndComments: number[];
     username: string;
     user_id: string | false;
+    avatar_url: string | null;
 }) {
     const [likes, setLikes] = useState<number>(numberOfLikesAndComments[0]);
     const [likedState, setLikedState] = useState<boolean>(liked);
@@ -59,6 +64,8 @@ export default function ArticleInformation({
     //     }
     // }, []);
 
+    const router = useRouter();
+
     const authorLink = `/profile/${article.user_id}`;
 
     function clientLike() {
@@ -87,6 +94,8 @@ export default function ArticleInformation({
                     }
                 });
             }
+        } else {
+            router.push("/login");
         }
     }
 
@@ -97,7 +106,20 @@ export default function ArticleInformation({
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
             ></link>
             <hr style={{ width: "90%" }} />
-            <Link href={authorLink}>
+            {fullVersion && avatar_url && (
+                <Image
+                    className={styles.avatar}
+                    width={40}
+                    height={40}
+                    src={avatar_url}
+                    alt="Avatar image"
+                ></Image>
+            )}
+            <Link
+                href={authorLink}
+                className={fullVersion ? styles.authorLink : ""}
+                style={{ color: "#1BB1E4" }}
+            >
                 <span>{username}</span>
             </Link>
             <br />
@@ -112,12 +134,24 @@ export default function ArticleInformation({
             <br />
             <br />
             <div className={styles.preventSelect}>
-                <span
+                <motion.span
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                        duration: 0.1,
+                        scale: {
+                            type: "spring",
+                            visualDuration: 0.4,
+                            bounce: 0.5,
+                        },
+                    }}
+                    whileHover={{ scale: 1.25 }}
+                    whileTap={{ scale: 0.8 }}
                     onClick={clientLike}
                     className={`${
                         !likedState ? "far fa-thumbs-up" : "fas fa-thumbs-up"
                     } ${styles.thumbsUp}`}
-                ></span>
+                ></motion.span>
                 <span className={styles.likes}>{likes}</span>
 
                 <span

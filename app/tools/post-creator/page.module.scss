@@ -1,26 +1,80 @@
 .creator {
     font-size: 30px;
-    font-family: 'Times New Roman';
 
     h2 {
         margin: 0;
     }
 
     textarea {
-        margin: 5px 0 0 0;
-        border-radius: 5px;
-        border: 3px lightblue solid;
         font-size: 30px;
-        font-family: 'Times New Roman';
+        font-family: "Times New Roman";
         field-sizing: content;
         width: calc(100% - 20px);
         max-width: 99%;
         resize: none;
+        margin: 10px;
+        border: 2px solid lightblue;
+        border-radius: 5px;
+        transition: 0.3s;
+        text-align: center;
+    }
+
+    div {
+        text-align: center;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    textarea:hover {
+        box-shadow: 0px 0px 10px 0px lightblue;
     }
 
     h1 {
         font-size: 40px;
     }
+}
+
+.coverImage {
+    height: 400px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 5px;
+}
+
+.draftSelector {
+    font-size: 30px;
+    padding: 5px;
+    cursor: pointer;
+    border: 2px solid lightblue;
+    background-color: #e7e6e6;
+    transition: 1s;
+    border-radius: 5px;
+    margin: 10px;
+    height: 70px;
+}
+
+.deleteDraft {
+    font-size: 30px;
+    padding: 5px;
+    cursor: pointer;
+    border: 2px solid lightblue;
+    background-color: #e7e6e6;
+    transition: 1s;
+    border-radius: 5px;
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+}
+
+.deleteDraft:hover,
+.draftSelector:hover,
+.addSectionButton:hover {
+    background-color: white;
+    box-shadow: 0px 0px 10px 0px lightblue;
 }
 
 .titleContainer {
@@ -41,37 +95,50 @@
     }
 }
 
-.primaryImageContainer {
-    font-size: 15px;
-
-    textarea {
-        font-size: 17px;
-        min-height: 20px;
-    }
-}
-
 .bodyContainer {
     font-size: 15px;
+    margin: 0;
+    width: 100% !important;
+
+    h1 {
+        margin-bottom: 5px;
+    }
 }
 
 .tagsContainer {
     font-size: 15px;
 
     textarea {
-        font-size: 17px;
+        font-size: 20px;
         min-height: 20px;
         margin-bottom: 0;
+        width: 150px !important;
     }
 }
 
-.addSectionButton {
-    border-radius: 5px;
-    border: 3px lightblue solid;
-    font-size: 15px;
-    height: 28px;
-    cursor: pointer;
-    background-color: white;
+.displayedTags {
+    margin-top: 15px;
     margin-bottom: 15px;
+}
+.tags {
+    padding: 5px;
+    margin-left: 5px;
+    border-style: solid;
+    border-radius: 3px;
+}
+.tags:hover {
+    color: red;
+}
+
+.addSectionButton {
+    display: inline-block;
+    font-size: 25px;
+    padding: 10px;
+    cursor: pointer;
+    border: 2px solid lightblue;
+    background-color: #e7e6e6;
+    transition: 1s;
+    border-radius: 5px;
 }
 
 .addSectionSelection {
@@ -93,17 +160,20 @@
 }
 
 .publish {
-    font-family: 'Times New Roman';
-    margin-left: 10px;
-    border-radius: 5px;
-    border: 3px rgb(175, 255, 255) solid;
     font-size: 40px;
+    padding: 5px;
     cursor: pointer;
-    background-color: white;
+    border: 2px solid lightblue;
+    background-color: #e7e6e6;
+    transition: 1s;
+    border-radius: 5px;
+    margin: 10px;
+    height: 90px;
+    width: auto;
 }
-
 .publish:hover {
-    animation: shake 0.5s infinite
+    box-shadow: 0px 0px 10px 0px lightblue;
+    background-color: white;
 }
 
 .error {

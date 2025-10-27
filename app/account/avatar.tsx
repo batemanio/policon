@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "./accountForm.module.scss";
+import styles from "../login/page.module.scss";
 import { uploadToStorage } from "../actions/uploadToStorage";
 import { deleteInStorage } from "../actions/deleteInStorage";
 import { useRouter } from "next/navigation";
@@ -31,22 +31,8 @@ export default function Avatar({
     } else {
         tempAvatarUrl = null;
     }
-    // const supabase = createClient();
 
     const [avatarUrl, setAvatarUrl] = useState<string | null>(tempAvatarUrl);
-    // const [uploading, setUploading] = useState(false);
-
-    // useEffect(() => {
-    //     if (avatar_url) {
-    //         downloadImage(avatar_url, supabase).then((res: any) => {
-    //             setAvatarUrl(res);
-    //         });
-    //     }
-    // }, [avatar_url, supabase]);
-
-    // useEffect(() => {
-    //     console.log("url", avatarUrl);
-    // }, [avatarUrl]);
 
     function uploadAvatarClient(event: any) {
         setLoading(true);
@@ -94,44 +80,8 @@ export default function Avatar({
         }
     }
 
-    // let uploadAvatar;
-    // if (onUpload) {
-    //     uploadAvatar = async (event: any) => {
-    //         try {
-    //             setUploading(true);
-
-    //             if (
-    //                 !event.target.files ||
-    //                 event.target.files.length === 0
-    //             ) {
-    //                 throw new Error("You must select an image to upload.");
-    //             }
-
-    //             const file = event.target.files[0];
-    //             const fileExt = file.name.split(".").pop();
-    //             const filePath = `${user_id}-${Math.random()}.${fileExt}`;
-
-    //             const { error: uploadError } = await supabase.storage
-    //                 .from("avatars")
-    //                 .upload(filePath, file);
-
-    //             if (uploadError) {
-    //                 throw uploadError;
-    //             }
-
-    //             onUpload(filePath);
-    //         } catch (error) {
-    //             setError(error);
-    //         } finally {
-    //             setUploading(false);
-    //         }
-    //     };
-    // }
-
-    // console.log(avatarUrl);
-
     return (
-        <div style={{ marginBottom: "10px" }}>
+        <div>
             {avatarUrl ? (
                 <Image
                     width={200}
@@ -147,8 +97,11 @@ export default function Avatar({
             )}
             <div>
                 <label
-                    style={{ margin: "100px" }}
-                    className={styles.button}
+                    className={styles.confirm}
+                    style={{
+                        marginTop: "0",
+                        width: "200px",
+                    }}
                     htmlFor="single"
                 >
                     {avatarUrl ? "Update Avatar" : "Upload Avatar"}

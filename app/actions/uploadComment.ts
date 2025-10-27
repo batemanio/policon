@@ -10,8 +10,8 @@ export async function uploadComment(newComment: string, article_id: string) {
         const supabase = await createClient();
 
         const { data: user, error } = await supabase.auth.getUser();
-        if (error?.message) {
-            throw error;
+        if (error) {
+            throw "Please login";
         }
         if (user.user) {
             const user_id = user.user.id;
@@ -73,7 +73,7 @@ export async function uploadComment(newComment: string, article_id: string) {
 
         const returnData: apiError = {
             type: "error",
-            error: "Error",
+            error: error,
         };
         return returnData;
     }

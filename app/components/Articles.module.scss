@@ -43,7 +43,6 @@
 }
 
 .title {
-
     overflow-y: auto;
     margin: 0;
     grid-area: 1 / 2 / 2 / 3;
@@ -53,6 +52,8 @@
     span {
         display: block;
         transition: 1s;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     span:hover {

@@ -17,6 +17,7 @@ export function FullArticleClient({
     numberOfComments,
     currentPage,
     user_id,
+    avatar_url,
 }: {
     article: article;
     liked: apiError;
@@ -26,6 +27,7 @@ export function FullArticleClient({
     numberOfComments: number;
     currentPage: number;
     user_id: string | false;
+    avatar_url: string;
 }) {
     return (
         <div className={styles.article}>
@@ -45,6 +47,7 @@ export function FullArticleClient({
                 numberOfLikesAndComments={numberOfLikesAndComments.content}
                 username={username.content}
                 fullVersion={true}
+                avatar_url={avatar_url}
             />
             <div>{parse(article.content)}</div>
             <Comments

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { type User } from "@supabase/supabase-js";
 import Avatar from "./avatar";
-import styles from "./accountForm.module.scss";
+import styles from "../login/page.module.scss";
 import { apiError } from "../types/errors";
 import { profile } from "../types/dbTables";
 import { updateProfile } from "../actions/updateProfile";
@@ -19,7 +19,6 @@ export default function AccountFormClient({
     profile: profile;
     image: any;
 }) {
-    // const [profileUpdated, setProfileUpdated] = useState(false);
     const [fullname, setFullname] = useState<string>(profile.full_name);
     const [username, setUsername] = useState<string>(profile.username);
     const [avatar_url, setAvatarUrl] = useState<string>(profile.avatar_url);
@@ -29,61 +28,6 @@ export default function AccountFormClient({
 
     const user_id: string = user.id;
 
-    // const getProfile = useCallback(async () => {
-    //     try {
-    //         setLoading(true);
-
-    //         const { data, error, status } = await supabase
-    //             .from("profiles")
-    //             .select(`full_name, username, avatar_url`)
-    //             .eq("id", user?.id)
-    //             .single();
-
-    //         if (error && status !== 406) {
-    //             console.log(error);
-    //             throw error;
-    //         }
-
-    //         if (data) {
-    //             setFullname(data.full_name);
-    //             setUsername(data.username);
-    //             setAvatarUrl(data.avatar_url);
-    //         }
-    //     } catch (error: any) {
-    //         setError(error);
-    //     } finallusername => {
-    //     getProfile();
-    // }, [user, getProfile]);
-
-    // async function updateProfile({
-    //     username,
-    //     avatar_url,
-    // }: {
-    //     username: string | null;
-    //     fullname: string | null;
-    //     avatar_url: string | null;
-    // }) {
-    //     try {
-    //         setLoading(true);
-    //         setProfileUpdated(false);
-
-    //         const { error } = await supabase.from("profiles").upsert({
-    //             id: user?.id as string,
-    //             full_name: fullname,
-    //             username,
-    //             avatar_url,
-    //             edited_at: new Date().toISOString(),
-    //         });
-    //         if (error) throw error;
-    //         setProfileUpdated(true);
-    //     } catch (error: any) {
-    //         console.log(error);
-    //         setError(error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
     function updateProfileClient(url: string | null) {
         setLoading(true);
 
@@ -92,9 +36,7 @@ export default function AccountFormClient({
             used_avatar_url = url;
         }
 
-        console.log("hi", used_avatar_url);
-
-        if (username || fullname || used_avatar_url || bio) {
+        if (username && fullname) {
             updateProfile(
                 user_id,
                 fullname,
@@ -118,106 +60,199 @@ export default function AccountFormClient({
         }
     }
 
-    return !loading ? (
-        <div className={styles.form}>
-            <Avatar
-                setError={setError}
-                user_id={user_id}
-                avatar_url={avatar_url}
-                onUpload={(url: string) => {
-                    setAvatarUrl(url);
-                    updateProfileClient(url);
-                }}
-                setLoading={setLoading}
-                image={image}
-                loading={loading}
-            />
-
-            <div>
-                <label className={styles.label} htmlFor="email">
-                    Email
-                </label>
-                <input
-                    maxLength={100}
-                    className={styles.input}
-                    id="email"
-                    type="text"
-                    value={user?.email || ""}
-                    disabled
+    if (!loading) {
+        return (
+            <div className={styles.form}>
+                <h1 className={styles.header}>Settings</h1>
+                <Link href={`/profile/${user_id}`}>
+                    <h2 style={{ marginTop: "-30px" }}>View public profile</h2>
+                </Link>
+                <Avatar
+                    setError={setError}
+                    user_id={user_id}
+                    avatar_url={avatar_url}
+                    onUpload={(url: string) => {
+                        setAvatarUrl(url);
+                        updateProfileClient(url);
+                    }}
+                    setLoading={setLoading}
+                    image={image}
+                    loading={loading}
                 />
-            </div>
-            <div>
-                <label className={styles.label} htmlFor="fullName">
-                    Full Name
-                </label>
-                <input
-                    maxLength={100}
-                    className={styles.input}
-                    id="fullName"
-                    type="text"
-                    value={fullname || ""}
-                    onChange={(e) => setFullname(e.target.value)}
-                />
-            </div>
-            <div>
-                <label className={styles.label} htmlFor="username">
-                    Username
-                </label>
-                <input
-                    maxLength={100}
-                    className={styles.input}
-                    id="username"
-                    type="text"
-                    value={username || ""}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </div>
-            <div>
-                <label className={styles.label} htmlFor="bio">
-                    Bio
-                </label>
-                <textarea
-                    maxLength={2000}
-                    className={styles.bio}
-                    id="bio"
-                    value={bio || ""}
-                    onChange={(e) => setBio(e.target.value)}
-                />
-            </div>
+                <form>
+                    <p className={styles.label}>Email:</p>
+                    <input
+                        placeholder="Email"
+                        className={styles.input}
+                        type="email"
+                        value={user.email}
+                        maxLength={100}
+                        disabled
+                    />
+                    <p className={styles.label}>Username:</p>
+                    <input
+                        placeholder="Username"
+                        className={styles.input}
+                        type="text"
+                        name="username"
+                        maxLength={25}
+                        onChange={(e) => setUsername(e.target.value)}
+                        value={username}
+                    />
+                    <p className={styles.label}>Full name:</p>
+                    <input
+                        placeholder="Full name"
+                        className={styles.input}
+                        type="text"
+                        name="full_name"
+                        maxLength={50}
+                        onChange={(e) => setFullname(e.target.value)}
+                        value={fullname}
+                    />
+                    <p className={styles.label}>Bio:</p>
+                    <textarea
+                        placeholder="Bio"
+                        maxLength={2000}
+                        className={`${styles.bio} ${styles.input}`}
+                        value={bio || ""}
+                        onChange={(e) => setBio(e.target.value)}
+                    />
 
-            <Link href={`/profile/${user_id}`}>
-                <h2>View public profile</h2>
-            </Link>
-
-            <div>
-                <button
-                    className={styles.button}
-                    onClick={() => updateProfileClient(null)}
-                    disabled={loading}
-                >
-                    Update
-                </button>
-            </div>
-
-            <div>
-                <form action="/auth/signout" method="post">
-                    <button className={styles.button} type="submit">
-                        Sign out
+                    <button
+                        className={styles.confirm}
+                        onClick={() => updateProfileClient(null)}
+                    >
+                        Save
                     </button>
                 </form>
+                <div>
+                    <form action="/auth/signout" method="post">
+                        <button
+                            style={{ width: "200px" }}
+                            className={styles.confirm}
+                            type="submit"
+                        >
+                            Sign out
+                        </button>
+                    </form>
+                </div>
+                <br />
+                {error?.type === "error" && (
+                    <p style={{ color: "red" }} className={styles.error}>
+                        Error
+                    </p>
+                )}
+                {error?.type === "success" && (
+                    <p style={{ color: "green" }} className={styles.error}>
+                        Profile Updated!
+                    </p>
+                )}
             </div>
-            {error?.type === "error" && (
-                <p style={{ color: "red" }} className={styles.error}>
-                    Error
-                </p>
-            )}
-            {error?.type === "success" && (
-                <p style={{ color: "green" }} className={styles.error}>
-                    Profile Updated!
-                </p>
-            )}
-        </div>
-    ) : (
-        <LoadingSpinner />
-    );
+        );
+    } else {
+        return <LoadingSpinner />;
+    }
+
+    // return !loading ? (
+    //     <div className={styles.form}>
+    //         <Avatar
+    //             setError={setError}
+    //             user_id={user_id}
+    //             avatar_url={avatar_url}
+    //             onUpload={(url: string) => {
+    //                 setAvatarUrl(url);
+    //                 updateProfileClient(url);
+    //             }}
+    //             setLoading={setLoading}
+    //             image={image}
+    //             loading={loading}
+    //         />
+
+    //         <div>
+    //             <label className={styles.label} htmlFor="email">
+    //                 Email
+    //             </label>
+    //             <input
+    //                 maxLength={100}
+    //                 className={styles.input}
+    //                 id="email"
+    //                 type="text"
+    //                 value={user?.email || ""}
+    //                 disabled
+    //             />
+    //         </div>
+    //         <div>
+    //             <label className={styles.label} htmlFor="fullName">
+    //                 Full Name
+    //             </label>
+    //             <input
+    //                 maxLength={100}
+    //                 className={styles.input}
+    //                 id="fullName"
+    //                 type="text"
+    //                 value={fullname || ""}
+    //                 onChange={(e) => setFullname(e.target.value)}
+    //             />
+    //         </div>
+    //         <div>
+    //             <label className={styles.label} htmlFor="username">
+    //                 Username
+    //             </label>
+    //             <input
+    //                 maxLength={100}
+    //                 className={styles.input}
+    //                 id="username"
+    //                 type="text"
+    //                 value={username || ""}
+    //                 onChange={(e) => setUsername(e.target.value)}
+    //             />
+    //         </div>
+    //         <div>
+    //             <label className={styles.label} htmlFor="bio">
+    //                 Bio
+    //             </label>
+    //             <textarea
+    //                 maxLength={2000}
+    //                 className={styles.bio}
+    //                 id="bio"
+    //                 value={bio || ""}
+    //                 onChange={(e) => setBio(e.target.value)}
+    //             />
+    //         </div>
+
+    //         <Link href={`/profile/${user_id}`}>
+    //             <h2>View public profile</h2>
+    //         </Link>
+
+    //         <div>
+    //             <button
+    //                 className={styles.button}
+    //                 onClick={() => updateProfileClient(null)}
+    //                 disabled={loading}
+    //             >
+    //                 Update
+    //             </button>
+    //         </div>
+
+    //         <div>
+    //             <form action="/auth/signout" method="post">
+    //                 <button className={styles.button} type="submit">
+    //                     Sign out
+    //                 </button>
+    //             </form>
+    //         </div>
+    //         {error?.type === "error" && (
+    //             <p style={{ color: "red" }} className={styles.error}>
+    //                 Error
+    //             </p>
+    //         )}
+    //         {error?.type === "success" && (
+    //             <p style={{ color: "green" }} className={styles.error}>
+    //                 Profile Updated!
+    //             </p>
+    //         )}
+    //     </div>
+    // ) : (
+    //     <LoadingSpinner />
+    // );
 }

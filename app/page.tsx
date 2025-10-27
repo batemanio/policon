@@ -5,6 +5,7 @@ import { Fredoka, Lexend_Deca, Caveat } from "next/font/google";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 
+
 const fredoka = Fredoka({
     subsets: ["latin"],
     display: "swap",

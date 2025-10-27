@@ -5,6 +5,7 @@ import { getUsername } from "../actions/getUsername";
 import { isLiked } from "../actions/isLiked";
 import { getComments } from "../actions/getComments";
 import { apiError } from "../types/errors";
+import { getAvatarUrl } from "@/app/actions/getAvatarUrl";
 
 export async function FullArticleServer({
     searchParams,
@@ -42,38 +43,54 @@ export async function FullArticleServer({
 
         const username = await getUsername(article[0].user_id);
 
-        const comments = await getComments(article_id, currentPage);
+        const { data: profile, error: secondError } = await supabase
+            .from("profiles")
+            .select()
+            .eq("id", user_id);
 
-        const commentsWithUsernames = [];
-        for (let index = 0; index < comments.content.length; index++) {
-            const comment = comments.content[index];
-            const username: apiError = await getUsername(comment.user_id);
-            commentsWithUsernames.push({
-                comment: comment,
-                username: username.content,
-            });
+        if (secondError) {
+            console.log(secondError);
         }
+        if (profile) {
+            const avatar_url_profile = profile[0].avatar_url;
+            const avatar_url = avatar_url_profile
+                ? (await getAvatarUrl(avatar_url_profile)).content
+                : "/no-avatar.png";
 
-        const { count, error: thirdError } = await supabase
-            .from("comments")
-            .select("*", { count: "exact", head: true })
-            .eq("article_id", article_id);
+            const comments = await getComments(article_id, currentPage);
 
-        if (thirdError) {
-            console.log(thirdError);
+            const commentsWithUsernames = [];
+            for (let index = 0; index < comments.content.length; index++) {
+                const comment = comments.content[index];
+                const username: apiError = await getUsername(comment.user_id);
+                commentsWithUsernames.push({
+                    comment: comment,
+                    username: username.content,
+                });
+            }
+
+            const { count, error: thirdError } = await supabase
+                .from("comments")
+                .select("*", { count: "exact", head: true })
+                .eq("article_id", article_id);
+
+            if (thirdError) {
+                console.log(thirdError);
+            }
+
+            return (
+                <FullArticleClient
+                    user_id={user_id}
+                    currentPage={currentPage}
+                    numberOfComments={count ?? 0}
+                    article={article[0]}
+                    liked={liked}
+                    numberOfLikesAndComments={numberOfLikesAndComments}
+                    username={username}
+                    commentsWithUsernames={commentsWithUsernames}
+                    avatar_url={avatar_url}
+                />
+            );
         }
-
-        return (
-            <FullArticleClient
-                user_id={user_id}
-                currentPage={currentPage}
-                numberOfComments={count ?? 0}
-                article={article[0]}
-                liked={liked}
-                numberOfLikesAndComments={numberOfLikesAndComments}
-                username={username}
-                commentsWithUsernames={commentsWithUsernames}
-            />
-        );
     }
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { AccountIcon } from "./AccountIcon";
 import { type User } from "@supabase/supabase-js";
+import * as motion from "motion/react-client";
 
 export function HeaderClient({ user }: { user: User | null }) {
     const pathname = usePathname();
@@ -90,10 +91,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                 )}
 
                 <section className={styles.socialMediaIcons}>
-                    <Link
-                        target="_blank"
-                        href="https://www.tiktok.com/@politix01"
-                    >
+                    <Link target="_blank" href="">
                         <span
                             className={`fab fa-tiktok ${styles.tiktok}`}
                         ></span>
@@ -106,12 +104,14 @@ export function HeaderClient({ user }: { user: User | null }) {
                 </section>
             </div>
 
-            <div
-                className={styles.mobileMenu}
-                style={{
-                    opacity: showMobileMenu ? "1" : "0",
-                    zIndex: showMobileMenu ? "100" : "-100",
+            <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={showMobileMenu ? { opacity: 1, scale: 1 } : {}}
+                transition={{
+                    duration: 0.4,
+                    scale: { type: "bounce", visualDuration: 0.4, bounce: 0.1 },
                 }}
+                className={styles.mobileMenu}
             >
                 <h1
                     onClick={closeMobileMenu}
@@ -130,7 +130,7 @@ export function HeaderClient({ user }: { user: User | null }) {
                         <li>Writers</li>
                     </Link>
                 </ul>
-            </div>
+            </motion.div>
         </>
     );
 }

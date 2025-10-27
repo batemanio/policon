@@ -8,15 +8,19 @@
 }
 
 .applyButton {
-    border-radius: 5px;
-    border: 3px lightblue solid;
-    font-size: 60px;
+    display: inline-block;
+    font-size: 35px;
+    padding: 10px;
     cursor: pointer;
-    background-color: white;
-    margin-bottom: 15px;
+    border: 2px solid lightblue;
+    background-color: #e7e6e6;
     transition: 1s;
+    border-radius: 5px;
+    margin: 10px;
+    margin-top: 0;
 }
 
 .applyButton:hover {
-    background-color: rgb(200, 200, 200);
+    background-color: white;
+    box-shadow: 0px 0px 10px 0px lightblue;
 }

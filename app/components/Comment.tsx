@@ -13,9 +13,11 @@ export function Comment({
 }) {
     return (
         <div className={`${styles.comment} ${raleway.className}`}>
+            <hr style={{ width: "100%" }}></hr>
             <Link
                 href={`/profile/${comment.comment.user_id}`}
                 className={styles.username}
+                style={{ color: "#1BB1E4" }}
             >
                 <p className={styles.date}>{comment.username}</p>
             </Link>

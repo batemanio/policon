@@ -16,6 +16,8 @@ import {
     titleMaxLength,
 } from "@/app/config/dbMaxLengths";
 import { draft_article } from "@/app/types/dbTables";
+import { MdDelete } from "react-icons/md";
+import Image from "next/image";
 
 export function PostCreatorClient({
     draftArticles,
@@ -61,7 +63,8 @@ export function PostCreatorClient({
     // }, [isSaved]);
 
     function addTagsection() {
-        if (tags.length <= tagsMaxLength) {
+        if (tags.length < tagsMaxLength && tagsSection[0].length > 0) {
+            console.log(tags.length);
             const newTags = tags;
             tags.push(tagsSection[0]);
             setTags(newTags);
@@ -275,12 +278,21 @@ export function PostCreatorClient({
         }
     }
 
+    function deleteDraft() {}
+
+    function deleteTag(index: number) {
+        const newTags = tags.filter((_, i) => i !== index);
+        setTags(newTags);
+        setIsSaved(false);
+    }
+
     return (
         <>
             <div style={{ display: loading ? "none" : "block" }}>
                 <div>
                     <h2>Drafts:</h2>
                     <select
+                        className={styles.draftSelector}
                         value={currentDraft}
                         onChange={(e: any) => {
                             updateCurrentDraft(e.target.value);
@@ -295,11 +307,55 @@ export function PostCreatorClient({
                             )
                         )}
                     </select>
+                    <button
+                        className={styles.deleteDraft}
+                        onClick={deleteDraft}
+                    >
+                        <MdDelete />
+                        not finished
+                    </button>
                 </div>
+
                 <div className={styles.creator}>
+                    <div>
+                        {primaryImage.length! > 0 && (
+                            <Image
+                                width={400}
+                                height={400}
+                                src={primaryImage}
+                                alt="Cover Image"
+                                className={styles.coverImage}
+                            ></Image>
+                        )}
+                        <div>
+                            <label
+                                className={styles.addSectionButton}
+                                htmlFor="primaryImageUploader"
+                            >
+                                <b>
+                                    {primaryImage
+                                        ? `Cover Image: ${
+                                              primaryImage.split("-")[1]
+                                          }`
+                                        : "Upload Cover Image"}
+                                </b>
+                            </label>
+                            <input
+                                style={{ display: "none" }}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e: any) => {
+                                    uploadImageClient(e.target.files[0], true);
+                                }}
+                                id="primaryImageUploader"
+                                disabled={loading}
+                            />
+                        </div>
+                    </div>
                     <div className={styles.titleContainer}>
-                        <h2>Title:</h2>
+                        {/* <h2>Title:</h2> */}
                         <textarea
+                            placeholder="Title"
                             value={title[0]}
                             onChange={(e) => updateTitle(e)}
                             maxLength={titleMaxLength}
@@ -309,8 +365,9 @@ export function PostCreatorClient({
                         </p>
                     </div>
                     <div className={styles.subTitleContainer}>
-                        <h2>Sub Title:</h2>
+                        {/* <h2>Sub Title:</h2> */}
                         <textarea
+                            placeholder="Sub Title"
                             className={styles.subTitleInput}
                             value={subTitle[0]}
                             onChange={(e) => updateSubTitle(e)}
@@ -320,39 +377,19 @@ export function PostCreatorClient({
                             {subTitle[1]} / {subTitleMaxLength}
                         </p>
                     </div>
-                    <div className={styles.primaryImageContainer}>
-                        <h2>Cover image URL:</h2>
-                        <label
-                            className={styles.addSectionButton}
-                            htmlFor="primaryImageUploader"
-                        >
-                            {primaryImage
-                                ? `Image: ${primaryImage.split("-")[1]}`
-                                : "Upload image"}
-                        </label>
-                        <input
-                            style={{ display: "none" }}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e: any) => {
-                                uploadImageClient(e.target.files[0], true);
-                            }}
-                            id="primaryImageUploader"
-                            disabled={loading}
-                        />
-                    </div>
                     <div>
                         <div className={styles.bodyContainer}>
-                            <h2>Article Body:</h2>
+                            <h1>Article Body:</h1>
                             <Editor
                                 value={bodyValue}
                                 onInit={handleInit}
                                 onEditorChange={handleUpdate}
                                 onBeforeAddUndo={handleBeforeAddUndo}
-                                // tinymceScriptSrc="/tinymce/tinymce.min.js"
-                                // licenseKey="your-license-key"
-                                apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+                                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                                licenseKey="your-license-key"
+                                // apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
                                 init={{
+                                    width: "100%",
                                     branding: false,
                                     promotion: false,
                                     plugins:
@@ -476,7 +513,17 @@ export function PostCreatorClient({
                         >
                             Add tag
                         </button>
-                        <p>{tags.toString()}</p>
+                        <div className={styles.displayedTags}>
+                            {tags.map((tag: any, index: number) => (
+                                <span
+                                    onClick={() => deleteTag(index)}
+                                    className={styles.tags}
+                                    key={index}
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
                         <p className={styles.characterCounter}>
                             {tags.length} / {tagsMaxLength}
                         </p>
@@ -492,13 +539,16 @@ export function PostCreatorClient({
                                 ? "Update Draft"
                                 : "Save Draft"}
                         </button>
+                        <button className={styles.publish} onClick={() => {}}>
+                            Preview (not finished)
+                        </button>
                         <button
                             className={styles.publish}
                             onClick={() => {
                                 create("pending");
                             }}
                         >
-                            Submit Blog for Admin Approval!
+                            Submit Blog to be Approved
                         </button>
                     </div>
                 </div>

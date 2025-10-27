@@ -27,13 +27,13 @@ export default async function Writers() {
 
     const { data: user_role, error: secondError } = await supabase
         .from("user_roles")
-        .select()
-        .eq("user_id", user?.id);
+        .select();
     if (secondError) {
         console.log(secondError);
     }
+    console.log("user_role", user_role);
 
-    const role = user_role ? user_role[0].role : "reader";
+    const role = user_role?.length ? user_role[0].role : "reader";
 
     if (user && user_role) {
         // const { data: user_permissions, error: thirdError } = await supabase
@@ -51,20 +51,28 @@ export default async function Writers() {
                 {role === "editor" ||
                     (role === "admin" && (
                         <Link href="/tools/post-creator">
-                            <button>Create a post</button>
+                            <button className={styles.applyButton}>
+                                Create an article!
+                            </button>
                         </Link>
                     ))}
-                {role === "admin" && (
-                    <Link href="/tools/post-approver">
-                        <button>Approve posts</button>
-                    </Link>
-                )}
                 {role === "editor" ||
                     (role === "admin" && (
                         <Link href="/tools/approved-posts">
-                            <button>Approved posts</button>
+                            <button className={styles.applyButton}>
+                                My approved articles!
+                            </button>
                         </Link>
                     ))}
+                <br />
+                <br />
+                {role === "admin" && (
+                    <Link href="/tools/post-approver">
+                        <button className={styles.applyButton}>
+                            Approve articles!
+                        </button>
+                    </Link>
+                )}
             </>
         );
         // } else {
